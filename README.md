@@ -57,7 +57,31 @@ Start SonarQube and execute metrics collection on your project. This can be done
 
 To view results, configure SonarQube dashboard for your project. Add custom widget called **jMetrics**
 
+## Update Java version
+
+Currently Java 9 is supported. To add support of newer Java version, you should use Anrlr to generate new Java parser, lexer and listeners.
+Current [Antlr4 Java Grammar][] that is used, provided by Antlr.
+To generate new Java parser, lexer and listeners you could create simple maven project and use antlr4-maven-plugin:
+
+```xml
+<plugin>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr4-maven-plugin</artifactId>
+    <version>4.7</version>
+    <executions>
+        <execution>
+            <goals>
+               <goal>antlr4</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+Antlr plugin gets grammar description from src/main/antlr4/\<package\>/*.g4 files, generates the code and places it into target/generated-sources/antlr4/<package>
+Use command `mvn generate-sources` to generate Java classes from grammar file.
+
 [Maven]: https://maven.apache.org/
 [Git]: http://help.github.com/set-up-git-redirect
 [JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
 [SonarQube]: https://www.sonarqube.org/
+[Antlr4 Java Grammar]: https://github.com/antlr/grammars-v4/blob/master/java9/Java9.g4
