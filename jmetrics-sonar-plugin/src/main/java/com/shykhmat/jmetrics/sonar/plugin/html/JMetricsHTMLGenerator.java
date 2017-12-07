@@ -1,5 +1,5 @@
 
-package com.shykhmat.jmetrics.plugin.html;
+package com.shykhmat.jmetrics.sonar.plugin.html;
 
 import java.util.HashMap;
 import java.util.Map;

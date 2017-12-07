@@ -1,4 +1,4 @@
-package com.shykhmat.jmetrics.plugin.sensor;
+package com.shykhmat.jmetrics.sonar.plugin.sensor;
 
 import java.io.File;
 
@@ -11,8 +11,8 @@ import org.sonar.api.measures.Measure;
 
 import com.shykhmat.jmetrics.core.api.JMetricsApi;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
-import com.shykhmat.jmetrics.plugin.html.JMetricsHTMLGenerator;
-import com.shykhmat.jmetrics.plugin.metric.JMetrics;
+import com.shykhmat.jmetrics.sonar.plugin.html.JMetricsHTMLGenerator;
+import com.shykhmat.jmetrics.sonar.plugin.metric.JMetrics;
 
 /**
  * Sonar sensor to process a project and calculate metrics.

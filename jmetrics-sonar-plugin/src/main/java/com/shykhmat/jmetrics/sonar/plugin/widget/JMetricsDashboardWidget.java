@@ -1,4 +1,4 @@
-package com.shykhmat.jmetrics.plugin.widget;
+package com.shykhmat.jmetrics.sonar.plugin.widget;
 
 import org.sonar.api.web.AbstractRubyTemplate;
 import org.sonar.api.web.Description;

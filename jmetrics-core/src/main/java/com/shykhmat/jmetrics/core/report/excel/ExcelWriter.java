@@ -2,6 +2,7 @@
 package com.shykhmat.jmetrics.core.report.excel;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,11 +21,12 @@ import com.shykhmat.jmetrics.core.report.ProjectReport;
 
 public class ExcelWriter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExcelWriter.class);
+    private static final String EXCEL_EXTENSION = ".xlsx";
 
     public boolean writeMetricsToExcel(String pathToFile, ProjectReport project) {
         try {
             Workbook workbook = writeToWorkbook(project);
-            writeToFile(pathToFile, workbook);
+            writeToFile(fixReportPath(project, pathToFile), workbook);
         } catch (IOException e) {
             LOGGER.error("Error during writing metrics to Excel file: ", e);
             return false;
@@ -46,15 +48,27 @@ public class ExcelWriter {
         }
         return Base64.getEncoder().encode(outputStream.toByteArray());
     }
-
+    
     private Workbook writeToWorkbook(ProjectReport project) {
         Workbook workbook = new XSSFWorkbook();
         writeClassesMetrics(project, workbook);
         writeMethodsMetrics(project, workbook);
         return workbook;
     }
+    
+    private String fixReportPath(ProjectReport project, String reportPath) {
+        if (!reportPath.endsWith(EXCEL_EXTENSION)) {
+            String projectName = project.getName();
+            if (!reportPath.endsWith(File.separator)) {
+                projectName = File.separator + projectName;
+            }
+            reportPath += projectName + EXCEL_EXTENSION;
+        }
+        return reportPath;
+    }
 
     private void writeToFile(String pathToFile, Workbook workbook) throws IOException {
+        LOGGER.info("Writing report file {}", pathToFile);
         OutputStream fileOut = null;
         try {
             fileOut = new FileOutputStream(pathToFile);

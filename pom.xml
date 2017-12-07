@@ -11,6 +11,7 @@
 		<module>jmetrics-core</module>
 		<module>jmetrics-sonar-plugin</module>
 		<module>jmetrics-console</module>
+		<module>jmetrics-maven-plugin</module>
 	</modules>
 
 	<properties>
@@ -61,4 +62,14 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>com.shykhmat</groupId>
+				<artifactId>jmetrics-maven-plugin</artifactId>
+				<version>${project.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

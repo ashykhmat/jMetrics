@@ -53,7 +53,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<pluginKey>jMetrics</pluginKey>
-					<pluginClass>com.shykhmat.jmetrics.plugin.JMetricsPlugin</pluginClass>
+					<pluginClass>com.shykhmat.jmetrics.sonar.plugin.JMetricsPlugin</pluginClass>
 					<pluginName>Sonar jMetrics Plugin</pluginName>
 					<pluginDescription>Calculates different metrics</pluginDescription>
 				</configuration>

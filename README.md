@@ -57,6 +57,25 @@ Start SonarQube and execute metrics collection on your project. This can be done
 
 To view results, configure SonarQube dashboard for your project. Add custom widget called **jMetrics**
 
+## Run Maven Plug-in
+
+To run jMetrics as a [Maven][] plug-in, update your project pom.xml file and add following reporting configuration:
+
+```xml
+<plugin>
+	<groupId>com.shykhmat</groupId>
+	<artifactId>jmetrics-maven-plugin</artifactId>
+	<version>1.0-SNAPSHOT</version>
+</plugin>
+```
+
+To execute metrics collection on your project and report generation, execute following Maven command in your project root folder:
+
+`mvn site`
+
+To view results, navigate into target/site folder. Report will have name YOUR_PROJECT_NAME.xsls
+
+
 ## Update Java version
 
 Currently Java 9 is supported. To add support of newer Java version, you should use Anrlr to generate new Java parser, lexer and listeners.

@@ -1,5 +1,5 @@
 
-package com.shykhmat.jmetrics.plugin.metric;
+package com.shykhmat.jmetrics.sonar.plugin.metric;
 
 import java.util.List;
 
