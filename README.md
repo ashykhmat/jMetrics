@@ -46,7 +46,7 @@ Parameter | Description | Example Value |
 
 Sample command:
 
-`java -jar -DconfigPath=application.properties api/target/api-1.0-SNAPSHOT.jar server http.yml`
+`java -jar jmetrics-console/target/jmetrics-console-1.0-SNAPSHOT.jar -projectPath C:\\workspace\\my_application -reportPath C:\\report`
 
 ## Run SonarQube Plug-in
 
