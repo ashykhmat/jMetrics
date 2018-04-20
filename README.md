@@ -5,7 +5,7 @@ Supported metrics:
 
 Metric | Description |
 ------------ | ------------- |
-Maintainability Index | Is a software metric which measures how maintainable (easy to support and change) the source code is. |
+Maintainability Index | Is a software metric which measures how maintainable (easy to support and change) the source code is. Microsoft formula is used for calculation. A **high value means better maintainability**. Color coded ratings can be used to quickly identify trouble spots in your code. A **green rating is between 20 and 100** and indicates that the code has good maintainability. A **yellow rating is between 10 and 19** and indicates that the code is moderately maintainable. A **red rating is a rating lower than 9** and indicates low maintainability. More details about formula can be found on [Microsoft Official Website][]|
 Cyclomatic Complexity | Is a software metric (measurement), used to indicate the complexity of a program. It is a quantitative measure of the number of linearly independent paths through a program's source code. |
 Halstead Volume | Describes the size of the implementation of an algorithm. |
 Lines of Code | Describes total lines of code in the project. |
@@ -104,3 +104,4 @@ Use command `mvn generate-sources` to generate Java classes from grammar file.
 [JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
 [SonarQube]: https://www.sonarqube.org/
 [Antlr4 Java Grammar]: https://github.com/antlr/grammars-v4/blob/master/java9/Java9.g4
+[Microsoft Official Website]: https://blogs.msdn.microsoft.com/zainnab/2011/05/26/code-metrics-maintainability-index

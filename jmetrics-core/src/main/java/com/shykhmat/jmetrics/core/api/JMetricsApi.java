@@ -24,7 +24,7 @@ public class JMetricsApi {
     public JMetricsApi() {
         projectVisitor = new ProjectVisitor();
         maintainabilityIndexStatusResolver = new MaintainabilityIndexStatusResolver();
-        excelWriter = new ExcelWriter();
+        excelWriter = new ExcelWriter(maintainabilityIndexStatusResolver);
     }
 
     /**

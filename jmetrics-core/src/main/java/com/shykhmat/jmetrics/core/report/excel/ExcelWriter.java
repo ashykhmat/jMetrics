@@ -7,7 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,13 +21,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.shykhmat.jmetrics.core.metric.MetricStatusResolver;
+import com.shykhmat.jmetrics.core.metric.Status;
 import com.shykhmat.jmetrics.core.report.ClassReport;
 import com.shykhmat.jmetrics.core.report.MethodReport;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
 
+/**
+ * Class to write metrics report into Excel file.
+ */
 public class ExcelWriter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExcelWriter.class);
     private static final String EXCEL_EXTENSION = ".xlsx";
+    private MetricStatusResolver<Double> maintainabilityIndexStatusResolver;
+
+    public ExcelWriter(MetricStatusResolver<Double> maintainabilityIndexStatusResolver) {
+        this.maintainabilityIndexStatusResolver = maintainabilityIndexStatusResolver;
+    }
 
     public boolean writeMetricsToExcel(String pathToFile, ProjectReport project) {
         try {
@@ -48,14 +64,32 @@ public class ExcelWriter {
         }
         return Base64.getEncoder().encode(outputStream.toByteArray());
     }
-    
+
     private Workbook writeToWorkbook(ProjectReport project) {
         Workbook workbook = new XSSFWorkbook();
-        writeClassesMetrics(project, workbook);
-        writeMethodsMetrics(project, workbook);
+        Map<Status, CellStyle> statusCellStyles = prepareStatusCellStyles(workbook);
+        writeClassesMetrics(project, workbook, statusCellStyles);
+        writeMethodsMetrics(project, workbook, statusCellStyles);
         return workbook;
     }
-    
+
+    private Map<Status, CellStyle> prepareStatusCellStyles(Workbook workbook) {
+        CellStyle okCellStyle = workbook.createCellStyle();
+        okCellStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+        okCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        CellStyle warningCellStyle = workbook.createCellStyle();
+        warningCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        warningCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        CellStyle errorCellStyle = workbook.createCellStyle();
+        errorCellStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
+        errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        Map<Status, CellStyle> statusCellStyles = new HashMap<>();
+        statusCellStyles.put(Status.OK, okCellStyle);
+        statusCellStyles.put(Status.WARNING, warningCellStyle);
+        statusCellStyles.put(Status.ERROR, errorCellStyle);
+        return statusCellStyles;
+    }
+
     private String fixReportPath(ProjectReport project, String reportPath) {
         if (!reportPath.endsWith(EXCEL_EXTENSION)) {
             String projectName = project.getName();
@@ -80,18 +114,24 @@ public class ExcelWriter {
         }
     }
 
-    private void writeClassesMetrics(ProjectReport project, Workbook workbook) {
+    private void writeClassesMetrics(ProjectReport project, Workbook workbook,  Map<Status, CellStyle> statusCellStyles) {
         Sheet worksheet = createClassesSheet(workbook);
         createClassesHeader(worksheet);
         int index = 1;
         for (ClassReport concreteClass : project.getClasses()) {
             Row row = worksheet.createRow(index++);
             row.createCell(0).setCellValue(concreteClass.getName());
-            row.createCell(1).setCellValue(concreteClass.getMetrics().getMaintainabilityIndex());
+            createMaintainabilityIndexCell(statusCellStyles, concreteClass.getMetrics().getMaintainabilityIndex(), row);
             row.createCell(2).setCellValue(concreteClass.getMetrics().getCyclomaticComplexity());
             row.createCell(3).setCellValue(concreteClass.getMetrics().getLinesOfCode());
             row.createCell(4).setCellValue(concreteClass.getMetrics().getHalsteadVolume());
         }
+    }
+
+    private void createMaintainabilityIndexCell(Map<Status, CellStyle> statusCellStyles, Double maintainabilityIndex, Row row) {
+        Cell maintainabilityIndexCell = row.createCell(1);
+        maintainabilityIndexCell.setCellValue(maintainabilityIndex);
+        maintainabilityIndexCell.setCellStyle(statusCellStyles.get(maintainabilityIndexStatusResolver.getStatus(maintainabilityIndex)));
     }
 
     private void createClassesHeader(Sheet worksheet) {
@@ -111,7 +151,7 @@ public class ExcelWriter {
         return workbook.createSheet("Classes");
     }
 
-    private void writeMethodsMetrics(ProjectReport project, Workbook workbook) {
+    private void writeMethodsMetrics(ProjectReport project, Workbook workbook,  Map<Status, CellStyle> statusCellStyles) {
         Sheet worksheet = createMethodsSheet(workbook);
         createMethodsHeader(worksheet);
         int index = 1;
@@ -119,7 +159,7 @@ public class ExcelWriter {
             for (MethodReport method : concreteClass.getMethods()) {
                 Row row = worksheet.createRow(index++);
                 row.createCell(0).setCellValue(concreteClass.getName() + "." + method.getName());
-                row.createCell(1).setCellValue(method.getMetrics().getMaintainabilityIndex());
+                createMaintainabilityIndexCell(statusCellStyles, method.getMetrics().getMaintainabilityIndex(), row);
                 row.createCell(2).setCellValue(method.getMetrics().getCyclomaticComplexity());
                 row.createCell(3).setCellValue(method.getMetrics().getLinesOfCode());
                 row.createCell(4).setCellValue(method.getMetrics().getHalsteadVolume());
