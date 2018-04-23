@@ -4,14 +4,13 @@ package com.shykhmat.jmetrics.console;
 import java.util.Scanner;
 
 import com.shykhmat.jmetrics.core.api.JMetricsApi;
-import com.shykhmat.jmetrics.core.visitor.VisitorException;
 
 /**
  * Console application to collect metrics for java project and to generate Excel
  * report.
  */
 public class JMetricsApplication {
-    public static void main(String[] args) throws VisitorException {
+    public static void main(String[] args) {
         JMetricsApi jMetricsApi = new JMetricsApi();
         JMetricsApplicationProperties applicationProperties = new JMetricsApplicationProperties();
         if (applicationProperties.parse(args)) {
