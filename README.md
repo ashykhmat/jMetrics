@@ -17,7 +17,7 @@ jMetrics uses a [Maven][]-based build system. In the instructions below, `mvn` i
 ### Prerequisites
 [Git][] and [JDK 8 update 20 or later][JDK8 build]
 
-Be sure that your `JAVA_HOME` environment variable points to the `jdk1.8.0` folder
+Be sure that your `JAVA_HOME` environment variable points to the `jdk1.8.20` folder
 extracted from the JDK download.
 
 ### Check out sources
@@ -78,7 +78,7 @@ To view results, navigate into target/site folder. Report will have name YOUR_PR
 
 ## Update Java version
 
-Currently Java 9 is supported. To add support of newer Java version, you should use Anrlr to generate new Java parser, lexer and listeners.
+Currently Java 10 grammar is not provided, so latest supported version is Java 9. To add support of newer Java version, you should use Anrlr to generate new Java parser, lexer and listeners.
 Current [Antlr4 Java Grammar][] that is used, provided by Antlr.
 To generate new Java parser, lexer and listeners you could create simple maven project and use antlr4-maven-plugin:
 
