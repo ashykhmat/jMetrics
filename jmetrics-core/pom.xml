@@ -12,6 +12,7 @@
 
 	<properties>
 		<poi.version>3.17</poi.version>
+		<guava.version>23.0</guava.version>
 	</properties>
 
 	<dependencies>
@@ -40,7 +41,14 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-		
+
+		<!-- Google Guava Dependencies -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+
 		<!-- Logging dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

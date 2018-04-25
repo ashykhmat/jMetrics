@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Class that contains report information for java project.
+ */
 public class ProjectReport extends CodePartReport implements Serializable {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = -5055487412966922425L;
-    
+
     private Set<ClassReport> classes;
 
     public ProjectReport(String name) {

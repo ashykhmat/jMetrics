@@ -21,6 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
 import com.shykhmat.jmetrics.core.metric.MetricStatusResolver;
 import com.shykhmat.jmetrics.core.metric.Status;
 import com.shykhmat.jmetrics.core.report.ClassReport;
@@ -103,13 +104,16 @@ public class ExcelWriter {
 
     private void writeToFile(String pathToFile, Workbook workbook) throws IOException {
         LOGGER.info("Writing report file {}", pathToFile);
-        OutputStream fileOut = null;
+        OutputStream fileOutStream = null;
+        File fileOut = new File(pathToFile);
+        Files.createParentDirs(fileOut);
+        Files.touch(fileOut);
         try {
-            fileOut = new FileOutputStream(pathToFile);
-            workbook.write(fileOut);
+            fileOutStream = new FileOutputStream(pathToFile);
+            workbook.write(fileOutStream);
         } finally {
-            if (fileOut != null) {
-                fileOut.close();
+            if (fileOutStream != null) {
+                fileOutStream.close();
             }
         }
     }

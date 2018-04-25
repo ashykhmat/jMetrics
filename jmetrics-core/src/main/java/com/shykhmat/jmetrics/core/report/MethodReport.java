@@ -1,5 +1,8 @@
 package com.shykhmat.jmetrics.core.report;
 
+/**
+ * Class that contains report information for java method.
+ */
 public class MethodReport extends CodePartReport implements Comparable<MethodReport> {
 
     public MethodReport(String name) {

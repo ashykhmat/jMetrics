@@ -3,6 +3,9 @@ package com.shykhmat.jmetrics.core.report;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Class that contains report information for java class.
+ */
 public class ClassReport extends CodePartReport implements Comparable<ClassReport>{
     private Set<MethodReport> methods;
     private boolean isInterface;

@@ -14,6 +14,9 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.shykhmat.jmetrics.core.report.Metrics;
 
+/**
+ * Method to visit Java Class and calculate metrics for it.
+ */
 public class LinesOfCodeVisitor extends VoidVisitorAdapter<Metrics> {
     private static final PrettyPrinterConfiguration SKIP_COMMENTS_CONFIGURATION;
 

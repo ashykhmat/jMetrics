@@ -1,6 +1,9 @@
 
 package com.shykhmat.jmetrics.core.report;
 
+/**
+ * Class that contains all metrics calculated for java class/method.
+ */
 public class Metrics {
     private Double halsteadVolume = 0.;
     private Integer cyclomaticComplexity = 0;

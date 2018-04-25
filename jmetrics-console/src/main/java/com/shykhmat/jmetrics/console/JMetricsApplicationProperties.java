@@ -37,6 +37,13 @@ public class JMetricsApplicationProperties {
         additionalOptions.addOption(new Option(HELP_OPTION, false, "Command to see application help information"));
     }
 
+    /**
+     * Method to collect application properties from command line arguments
+     * 
+     * @param args
+     *            - specified command line arguments
+     * @return true if arguments were parsed successfully, false in another case
+     */
     public boolean parse(String[] args) {
         try {
             CommandLineParser parser = new DefaultParser();

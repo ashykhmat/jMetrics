@@ -17,7 +17,8 @@ import com.shykhmat.jmetrics.core.report.ClassReport;
 import com.shykhmat.jmetrics.core.metric.CodePart;
 
 /**
- * Method to visit Java Class and calculate metrics for it.
+ * Class that contains functionality to collect metrics for java classes,
+ * interfaces, enums and annotations.
  */
 public class ClassVisitor extends VoidVisitorAdapter<Set<ClassReport>> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassVisitor.class);
