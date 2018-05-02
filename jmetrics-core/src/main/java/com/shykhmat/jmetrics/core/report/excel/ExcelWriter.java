@@ -17,7 +17,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +41,7 @@ public class ExcelWriter {
     }
 
     public boolean writeMetricsToExcel(String pathToFile, ProjectReport project) {
-        try {
-            Workbook workbook = writeToWorkbook(project);
+        try (Workbook workbook = writeToWorkbook(project)) {
             writeToFile(fixReportPath(project, pathToFile), workbook);
         } catch (IOException e) {
             LOGGER.error("Error during writing metrics to Excel file: ", e);
@@ -67,7 +66,7 @@ public class ExcelWriter {
     }
 
     private Workbook writeToWorkbook(ProjectReport project) {
-        Workbook workbook = new XSSFWorkbook();
+        Workbook workbook = new SXSSFWorkbook();
         Map<Status, CellStyle> statusCellStyles = prepareStatusCellStyles(workbook);
         writeClassesMetrics(project, workbook, statusCellStyles);
         writeMethodsMetrics(project, workbook, statusCellStyles);
