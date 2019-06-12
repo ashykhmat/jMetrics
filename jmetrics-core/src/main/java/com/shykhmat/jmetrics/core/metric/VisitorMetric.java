@@ -13,8 +13,7 @@ import com.shykhmat.jmetrics.core.metric.CodePart;
 import com.shykhmat.jmetrics.core.report.Metrics;
 
 /**
- * Template class for all metrics that requires visit different code parts to be
- * calculated.
+ * Template class for all metrics that requires visit different code parts to be calculated.
  * 
  * @param <T>
  *            - metric return type
@@ -47,7 +46,8 @@ public abstract class VisitorMetric<T extends Number> implements Metric<CodePart
         }
         }
         long totalTime = System.nanoTime() - startTime;
-        getLogger().debug("Calculation done. Total execution time: {}. Result: {} ", totalTime, getMetricValue(metrics));
+        getLogger().debug("Calculation done. Total execution time: {}. Result: {} ", totalTime,
+                getMetricValue(metrics));
         return getMetricValue(metrics);
     }
 
@@ -62,8 +62,7 @@ public abstract class VisitorMetric<T extends Number> implements Metric<CodePart
     protected abstract String getMetricName();
 
     /**
-     * Method to retrieve concrete visitor that contains logic to calculate
-     * metric.
+     * Method to retrieve concrete visitor that contains logic to calculate metric.
      */
     protected abstract VoidVisitorAdapter<Metrics> getVisitor();
 

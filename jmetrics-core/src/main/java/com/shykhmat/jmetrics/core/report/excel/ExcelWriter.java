@@ -117,7 +117,8 @@ public class ExcelWriter {
         }
     }
 
-    private void writeClassesMetrics(ProjectReport project, Workbook workbook,  Map<Status, CellStyle> statusCellStyles) {
+    private void writeClassesMetrics(ProjectReport project, Workbook workbook,
+            Map<Status, CellStyle> statusCellStyles) {
         Sheet worksheet = createClassesSheet(workbook);
         createClassesHeader(worksheet);
         int index = 1;
@@ -131,10 +132,12 @@ public class ExcelWriter {
         }
     }
 
-    private void createMaintainabilityIndexCell(Map<Status, CellStyle> statusCellStyles, Double maintainabilityIndex, Row row) {
+    private void createMaintainabilityIndexCell(Map<Status, CellStyle> statusCellStyles, Double maintainabilityIndex,
+            Row row) {
         Cell maintainabilityIndexCell = row.createCell(1);
         maintainabilityIndexCell.setCellValue(maintainabilityIndex);
-        maintainabilityIndexCell.setCellStyle(statusCellStyles.get(maintainabilityIndexStatusResolver.getStatus(maintainabilityIndex)));
+        maintainabilityIndexCell
+                .setCellStyle(statusCellStyles.get(maintainabilityIndexStatusResolver.getStatus(maintainabilityIndex)));
     }
 
     private void createClassesHeader(Sheet worksheet) {
@@ -154,7 +157,8 @@ public class ExcelWriter {
         return workbook.createSheet("Classes");
     }
 
-    private void writeMethodsMetrics(ProjectReport project, Workbook workbook,  Map<Status, CellStyle> statusCellStyles) {
+    private void writeMethodsMetrics(ProjectReport project, Workbook workbook,
+            Map<Status, CellStyle> statusCellStyles) {
         Sheet worksheet = createMethodsSheet(workbook);
         createMethodsHeader(worksheet);
         int index = 1;

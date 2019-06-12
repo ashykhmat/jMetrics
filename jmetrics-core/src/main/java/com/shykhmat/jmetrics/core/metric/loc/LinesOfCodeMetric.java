@@ -14,7 +14,7 @@ import com.shykhmat.jmetrics.core.report.Metrics;
 public class LinesOfCodeMetric extends VisitorMetric<Integer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LinesOfCodeMetric.class);
     private static final String METRIC_NAME = "Lines of Code";
-    
+
     @Override
     protected Logger getLogger() {
         return LOGGER;
@@ -34,5 +34,5 @@ public class LinesOfCodeMetric extends VisitorMetric<Integer> {
     protected Integer getMetricValue(Metrics metrics) {
         return metrics.getLinesOfCode();
     }
-    
+
 }

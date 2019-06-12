@@ -1,6 +1,5 @@
 package com.shykhmat.jmetrics.core.metric;
 
-
 import com.github.javaparser.ast.Node;
 import com.shykhmat.jmetrics.core.report.Metrics;
 
@@ -11,7 +10,7 @@ public class CodePart {
     private Node codeToAnalyze;
     private CodePartType codeType;
     private Metrics metrics;
-    
+
     public CodePart(Node codeToAnalyze, CodePartType codeType) {
         this.codeToAnalyze = codeToAnalyze;
         this.codeType = codeType;
@@ -32,7 +31,7 @@ public class CodePart {
     public void setCodeType(CodePartType codeType) {
         this.codeType = codeType;
     }
-    
+
     public Metrics getMetrics() {
         return metrics;
     }

@@ -23,12 +23,13 @@ public class MethodVisitor extends VoidVisitorAdapter<Set<MethodReport>> {
     public MethodVisitor(CompositeMetric compositeMetric) {
         this.compositeMetric = compositeMetric;
     }
-    
+
     @Override
     public void visit(ConstructorDeclaration constructorDeclaration, Set<MethodReport> methods) {
         String parametersString = constructorDeclaration.getParameters().toString();
         parametersString.substring(1, parametersString.length() - 1);
-        MethodReport method = new MethodReport(constructorDeclaration.getName() + "(" + parametersString.substring(1, parametersString.length() - 1) + ")");
+        MethodReport method = new MethodReport(constructorDeclaration.getName() + "("
+                + parametersString.substring(1, parametersString.length() - 1) + ")");
         LOGGER.debug("Processing constructor: " + method.getName());
         try {
             CodePart codePart = new CodePart(constructorDeclaration, CodePart.CodePartType.CONSTRUCTOR);
@@ -43,7 +44,8 @@ public class MethodVisitor extends VoidVisitorAdapter<Set<MethodReport>> {
     public void visit(MethodDeclaration methodDeclaration, Set<MethodReport> methods) {
         String parametersString = methodDeclaration.getParameters().toString();
         parametersString.substring(1, parametersString.length() - 1);
-        MethodReport method = new MethodReport(methodDeclaration.getName() + "(" + parametersString.substring(1, parametersString.length() - 1) + ")");
+        MethodReport method = new MethodReport(
+                methodDeclaration.getName() + "(" + parametersString.substring(1, parametersString.length() - 1) + ")");
         LOGGER.debug("Processing method: " + method.getName());
         try {
             CodePart codePart = new CodePart(methodDeclaration, CodePart.CodePartType.METHOD);

@@ -11,8 +11,7 @@ import com.shykhmat.jmetrics.sonar.plugin.sensor.JMetricsSensor;
 import com.shykhmat.jmetrics.sonar.plugin.widget.JMetricsDashboardWidget;
 
 /**
- * The entry point for SonarQube plug-in that contains a list of provided
- * extensions.
+ * The entry point for SonarQube plug-in that contains a list of provided extensions.
  */
 public class JMetricsPlugin extends SonarPlugin {
 

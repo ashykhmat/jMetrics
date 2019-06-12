@@ -10,8 +10,7 @@ import org.apache.maven.reporting.MavenReportException;
 import com.shykhmat.jmetrics.core.api.JMetricsApi;
 
 /**
- * Plug-in for Maven to calculate different metrics for Java project and to
- * display appropriate report during build.
+ * Plug-in for Maven to calculate different metrics for Java project and to display appropriate report during build.
  */
 @Mojo(name = "jmetrics")
 public class JMetricsMojo extends AbstractMavenReport {

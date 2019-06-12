@@ -6,7 +6,7 @@ import java.util.TreeSet;
 /**
  * Class that contains report information for java class.
  */
-public class ClassReport extends CodePartReport implements Comparable<ClassReport>{
+public class ClassReport extends CodePartReport implements Comparable<ClassReport> {
     private Set<MethodReport> methods;
     private boolean isInterface;
 
@@ -37,14 +37,13 @@ public class ClassReport extends CodePartReport implements Comparable<ClassRepor
 
     @Override
     public int compareTo(ClassReport classToCompare) {
-        if (getMetrics().getMaintainabilityIndex() == classToCompare.getMetrics().getMaintainabilityIndex()){
+        if (getMetrics().getMaintainabilityIndex() == classToCompare.getMetrics().getMaintainabilityIndex()) {
             return getName().compareTo(classToCompare.getName());
         }
-        if (getMetrics().getMaintainabilityIndex() > classToCompare.getMetrics().getMaintainabilityIndex()){
+        if (getMetrics().getMaintainabilityIndex() > classToCompare.getMetrics().getMaintainabilityIndex()) {
             return 1;
         }
         return -1;
     }
 
-    
 }

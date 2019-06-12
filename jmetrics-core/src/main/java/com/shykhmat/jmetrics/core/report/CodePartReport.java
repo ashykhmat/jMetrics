@@ -6,7 +6,7 @@ package com.shykhmat.jmetrics.core.report;
 public abstract class CodePartReport {
     private String name;
     private Metrics metrics;
-    
+
     public CodePartReport(String name) {
         this.name = name;
     }

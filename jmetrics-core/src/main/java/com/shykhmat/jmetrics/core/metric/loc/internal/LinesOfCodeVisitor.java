@@ -47,7 +47,8 @@ public class LinesOfCodeVisitor extends VoidVisitorAdapter<Metrics> {
         if (parentNode instanceof CompilationUnit) {
             for (Node childNode : parentNode.getChildNodes()) {
                 if (childNode instanceof PackageDeclaration || childNode instanceof ImportDeclaration) {
-                    metrics.setLinesOfCode(metrics.getLinesOfCode() + calculateLOC(childNode.toString(SKIP_COMMENTS_CONFIGURATION)));
+                    metrics.setLinesOfCode(
+                            metrics.getLinesOfCode() + calculateLOC(childNode.toString(SKIP_COMMENTS_CONFIGURATION)));
                 }
             }
         }

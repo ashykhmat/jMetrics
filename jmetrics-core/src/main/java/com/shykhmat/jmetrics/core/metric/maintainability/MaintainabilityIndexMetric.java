@@ -9,8 +9,8 @@ import com.shykhmat.jmetrics.core.metric.CodePart;
 import com.shykhmat.jmetrics.core.report.Metrics;
 
 /**
- * Implementation of {@code Metric} to calculate Maintainability Index metric
- * using Microsoft formula. More details about formula can be found here:
+ * Implementation of {@code Metric} to calculate Maintainability Index metric using Microsoft formula. More details
+ * about formula can be found here:
  * https://blogs.msdn.microsoft.com/zainnab/2011/05/26/code-metrics-maintainability-index
  */
 public class MaintainabilityIndexMetric implements Metric<CodePart, Double> {

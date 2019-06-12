@@ -27,9 +27,11 @@ public class JMetricsApplicationProperties {
 
     public JMetricsApplicationProperties() {
         requiredOptions = new Options();
-        Option projectPath = new Option(PROJECT_PATH_OPTION, true, "Specifies path to the folder, that contains java application to analyze");
+        Option projectPath = new Option(PROJECT_PATH_OPTION, true,
+                "Specifies path to the folder, that contains java application to analyze");
         projectPath.setRequired(true);
-        Option reportPath = new Option(REPORT_PATH_OPTION, true, "Specifies path to the folder, that will be used to store generated Excel report");
+        Option reportPath = new Option(REPORT_PATH_OPTION, true,
+                "Specifies path to the folder, that will be used to store generated Excel report");
         reportPath.setRequired(true);
         requiredOptions.addOption(projectPath);
         requiredOptions.addOption(reportPath);
@@ -74,12 +76,13 @@ public class JMetricsApplicationProperties {
     private void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         Options helpOptions = new Options();
-        for (Option option : requiredOptions.getOptions()){
+        for (Option option : requiredOptions.getOptions()) {
             helpOptions.addOption(option);
         }
-        for (Option option : additionalOptions.getOptions()){
+        for (Option option : additionalOptions.getOptions()) {
             helpOptions.addOption(option);
         }
-        formatter.printHelp("Maintainability index calculator", "Read following instructions to work with the application", helpOptions, "Developed by Anton Shykhmat");
+        formatter.printHelp("Maintainability index calculator",
+                "Read following instructions to work with the application", helpOptions, "Developed by Anton Shykhmat");
     }
 }

@@ -8,12 +8,12 @@ import com.shykhmat.jmetrics.core.metric.Metric;
 import com.shykhmat.jmetrics.core.metric.MetricException;
 
 /**
- * Implementation of {@code Metric} to calculate Halstead Complexity metrics.
- * More details about formula can be found here:
- * https://en.wikipedia.org/wiki/Halstead_complexity_measures
+ * Implementation of {@code Metric} to calculate Halstead Complexity metrics. More details about formula can be found
+ * here: https://en.wikipedia.org/wiki/Halstead_complexity_measures
  */
 public class HalsteadComplexityMetrics implements Metric<CodePart, HalsteadComplexityMetrics> {
-    private double programLength, programVocabulary, estimatedLength, purityRatio, volume, difficulty, programEffort, programmingTime;
+    private double programLength, programVocabulary, estimatedLength, purityRatio, volume, difficulty, programEffort,
+            programmingTime;
     private double n1, n2, N1, N2;
     private Map<String, Integer> operators;
     private Map<String, Integer> operands;
@@ -67,7 +67,8 @@ public class HalsteadComplexityMetrics implements Metric<CodePart, HalsteadCompl
         }
         this.programLength = this.N1 + this.N2;
         this.programVocabulary = this.n1 + this.n2;
-        this.estimatedLength = (((this.n1) * (Math.log(this.n1) / Math.log(2))) + ((this.n2) * (Math.log(this.n2) / Math.log(2))));
+        this.estimatedLength = (((this.n1) * (Math.log(this.n1) / Math.log(2)))
+                + ((this.n2) * (Math.log(this.n2) / Math.log(2))));
         this.purityRatio = this.estimatedLength / this.programLength;
         this.volume = ((this.programLength) * (Math.log(this.programLength) / Math.log(2)));
         this.difficulty = (this.n1 / 2) * (this.N2 / this.n2);

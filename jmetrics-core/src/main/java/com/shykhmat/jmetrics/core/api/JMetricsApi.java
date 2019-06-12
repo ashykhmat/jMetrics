@@ -45,8 +45,7 @@ public class JMetricsApi {
     }
 
     /**
-     * Method to check if maintainability index is applicable or should be
-     * fixed.
+     * Method to check if maintainability index is applicable or should be fixed.
      * 
      * @param maintainabilityIndex
      * @return {@link Status}
@@ -96,7 +95,5 @@ public class JMetricsApi {
         }
         return isSuccessful;
     }
-
-
 
 }

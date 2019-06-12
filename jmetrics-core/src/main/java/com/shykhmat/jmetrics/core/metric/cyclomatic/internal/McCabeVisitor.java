@@ -21,8 +21,8 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.shykhmat.jmetrics.core.report.Metrics;
 
 /**
- * Implementation of Visitor pattern to navigate through code part and to
- * calculate cyclomatic complexity using McCabe formula.
+ * Implementation of Visitor pattern to navigate through code part and to calculate cyclomatic complexity using McCabe
+ * formula.
  */
 public class McCabeVisitor extends VoidVisitorAdapter<Metrics> {
 

@@ -11,8 +11,7 @@ import com.shykhmat.jmetrics.core.report.MethodReport;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
 
 /**
- * Class to generate HTML report with project metrics. Currently only
- * Maintainability index is displayed.
+ * Class to generate HTML report with project metrics. Currently only Maintainability index is displayed.
  */
 public class JMetricsHTMLGenerator {
     private static final String REPORT_START = "<div class='scrollable-div'><div class='accordion'>";

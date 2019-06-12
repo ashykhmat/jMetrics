@@ -6,8 +6,7 @@ import java.util.Scanner;
 import com.shykhmat.jmetrics.core.api.JMetricsApi;
 
 /**
- * Console application to collect metrics for java project and to generate Excel
- * report.
+ * Console application to collect metrics for java project and to generate Excel report.
  */
 public class JMetricsApplication {
     public static void main(String[] args) {
@@ -20,7 +19,6 @@ public class JMetricsApplication {
         }
         closeApplication();
     }
-
 
     private static void closeApplication() {
         System.out.println("Press \"ENTER\" to exit application...");
