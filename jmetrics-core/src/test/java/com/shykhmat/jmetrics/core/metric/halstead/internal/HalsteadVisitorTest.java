@@ -6,10 +6,11 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.Test;
 
 import com.google.common.base.Charsets;
@@ -19,116 +20,148 @@ public class HalsteadVisitorTest {
 
 	@Test
 	public void testEmptyPackageVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
-		assertPackageDeclaration("test-data/package/EmptyPackageName.test", expectedOperators, expectedOperands);
+		Map<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
+		assertCalculations("test-data/package/EmptyPackageName.test", "PACKAGE", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testSimplePackageVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put("package", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("test", 1);
-		assertPackageDeclaration("test-data/package/SimplePackageName.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/package/SimplePackageName.test", "PACKAGE", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testComplexPackageVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put(".", 2);
 		expectedOperators.put("package", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertPackageDeclaration("test-data/package/ComplexPackageName.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/package/ComplexPackageName.test", "PACKAGE", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testPackageWithAdditionalSemicolonVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put(".", 2);
 		expectedOperators.put("package", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertPackageDeclaration("test-data/package/PackageNameAndAdditionalSemicolon.test", expectedOperators,
+		assertCalculations("test-data/package/PackageNameAndAdditionalSemicolon.test", "PACKAGE", expectedOperators,
 				expectedOperands);
 	}
 
 	@Test
 	public void testEmptyImportVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
-		assertPackageDeclaration("test-data/import/EmptyImport.test", expectedOperators, expectedOperands);
+		Map<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
+		assertCalculations("test-data/import/EmptyImport.test", "IMPORT", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testSimpleImportVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put(".", 1);
 		expectedOperators.put("import", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("test", 1);
 		expectedOperands.put("Test", 1);
-		assertPackageDeclaration("test-data/import/SimpleImport.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/SimpleImport.test", "IMPORT", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testComplexImportVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put(".", 3);
 		expectedOperators.put("import", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
 		expectedOperands.put("Test", 1);
-		assertPackageDeclaration("test-data/import/ComplexImport.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/ComplexImport.test", "IMPORT", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testImportAllVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 1);
 		expectedOperators.put(".", 3);
 		expectedOperators.put("*", 1);
 		expectedOperators.put("import", 1);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertPackageDeclaration("test-data/import/ImportAll.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/ImportAll.test", "IMPORT", expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testMultipleImportsVisit() {
-		HashMap<String, Integer> expectedOperators = new HashMap<>();
+		Map<String, Integer> expectedOperators = new HashMap<>();
 		expectedOperators.put(";", 3);
 		expectedOperators.put(".", 6);
 		expectedOperators.put("*", 1);
 		expectedOperators.put("import", 3);
-		HashMap<String, Integer> expectedOperands = new HashMap<>();
+		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("com", 2);
 		expectedOperands.put("shykhmat", 2);
 		expectedOperands.put("test", 2);
 		expectedOperands.put("Test1", 1);
 		expectedOperands.put("Test2", 1);
-		assertPackageDeclaration("test-data/import/MultipleImports.test", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/MultipleImports.test", "IMPORT", expectedOperators, expectedOperands);
 	}
 
-	private void assertPackageDeclaration(String fileName, HashMap<String, Integer> expectedOperators,
-			HashMap<String, Integer> expectedOperands) {
+	@Test
+	public void testMethodVisit() {
+		Map<String, Integer> expectedOperators = new HashMap<>();
+		expectedOperators.put("==", 1);
+		expectedOperators.put("=", 3);
+		Map<String, Integer> expectedOperands = new HashMap<>();
+		expectedOperands.put("a", 3);
+		expectedOperands.put("b", 3);
+		expectedOperands.put("3", 2);
+		expectedOperands.put("method", 1);
+		expectedOperands.put("4", 1);
+		expectedOperands.put("MISSING", 1);
+		assertCalculations("test-data/class/Method.test", "METHOD", expectedOperators, expectedOperands);
+	}
+
+	@Test
+	public void testClassVisit() {
+		Map<String, Integer> expectedOperators = new HashMap<>();
+		expectedOperators.put("==", 1);
+		expectedOperators.put("=", 3);
+		Map<String, Integer> expectedOperands = new HashMap<>();
+		expectedOperands.put("a", 3);
+		expectedOperands.put("b", 3);
+		expectedOperands.put("3", 2);
+		expectedOperands.put("method", 1);
+		expectedOperands.put("4", 1);
+		expectedOperands.put("A", 1);
+		assertCalculations("test-data/class/Class.test", "CLASS", expectedOperators, expectedOperands);
+	}
+
+	private void assertCalculations(String fileName, String type, Map<String, Integer> expectedOperators,
+			Map<String, Integer> expectedOperands) {
 		HalsteadVisitor halsteadVisitor = new HalsteadVisitor();
 		try {
-			getCompilationUnit(fileName).accept(halsteadVisitor);
+			parseCode(fileName, type).accept(halsteadVisitor);
+			System.out.println("OPERANDS: " + halsteadVisitor.getOperands());
+			System.out.println("OPERATORDS: " + halsteadVisitor.getOperators());
 			assertThat(halsteadVisitor.getOperands().size(), is(expectedOperands.size()));
 			assertThat(halsteadVisitor.getOperands(), is(expectedOperands));
 			assertThat(halsteadVisitor.getOperators().size(), is(expectedOperators.size()));
@@ -138,11 +171,11 @@ public class HalsteadVisitorTest {
 		}
 	}
 
-	private CompilationUnit getCompilationUnit(String filePath) throws IOException {
+	private ASTNode parseCode(String filePath, String type) throws IOException {
 		ASTParser parser = ASTParser.newParser(AST.JLS11);
 		parser.setSource(Resources.toString(Resources.getResource(filePath), Charsets.UTF_8).toCharArray());
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setKind("METHOD".equals(type) ? ASTParser.K_CLASS_BODY_DECLARATIONS : ASTParser.K_COMPILATION_UNIT);
 		parser.setResolveBindings(true);
-		return (CompilationUnit) parser.createAST(null);
+		return parser.createAST(null);
 	}
 }
