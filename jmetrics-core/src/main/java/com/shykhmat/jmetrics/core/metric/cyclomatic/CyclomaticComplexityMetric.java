@@ -15,27 +15,27 @@ import com.shykhmat.jmetrics.core.report.Metrics;
  * https://en.wikipedia.org/wiki/Cyclomatic_complexity
  */
 public class CyclomaticComplexityMetric extends VisitorMetric<Integer> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CyclomaticComplexityMetric.class);
-    private static final String METRIC_NAME = "Cyclomatic Complexity";
+	private static final Logger LOGGER = LoggerFactory.getLogger(CyclomaticComplexityMetric.class);
+	private static final String METRIC_NAME = "Cyclomatic Complexity";
 
-    @Override
-    protected Logger getLogger() {
-        return LOGGER;
-    }
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
 
-    @Override
-    protected String getMetricName() {
-        return METRIC_NAME;
-    }
+	@Override
+	protected String getMetricName() {
+		return METRIC_NAME;
+	}
 
-    @Override
-    protected VoidVisitorAdapter<Metrics> getVisitor() {
-        return new McCabeVisitor();
-    }
+	@Override
+	protected VoidVisitorAdapter<Metrics> getVisitor() {
+		return new McCabeVisitor();
+	}
 
-    @Override
-    protected Integer getMetricValue(Metrics metrics) {
-        return metrics.getCyclomaticComplexity();
-    }
+	@Override
+	protected Integer getMetricValue(Metrics metrics) {
+		return metrics.getCyclomaticComplexity();
+	}
 
 }

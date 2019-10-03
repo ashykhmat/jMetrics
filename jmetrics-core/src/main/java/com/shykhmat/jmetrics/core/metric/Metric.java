@@ -10,5 +10,5 @@ import com.shykhmat.jmetrics.core.metric.CodePart;
  * @param <V> - metric result type
  */
 public interface Metric<T extends CodePart, V> {
-    V calculateMetric(T codeToAnalyze) throws MetricException;
+	V calculateMetric(T codeToAnalyze) throws MetricException;
 }

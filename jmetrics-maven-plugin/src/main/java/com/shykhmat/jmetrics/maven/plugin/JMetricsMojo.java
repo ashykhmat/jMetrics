@@ -15,32 +15,32 @@ import com.shykhmat.jmetrics.core.api.JMetricsApi;
  */
 @Mojo(name = "jmetrics")
 public class JMetricsMojo extends AbstractMavenReport {
-    private static final String OUTPUT_NAME = "jMetrics";
+	private static final String OUTPUT_NAME = "jMetrics";
 
-    @Override
-    public String getDescription(Locale locale) {
-        return getBundle(locale).getString("report.jmetrics.description");
-    }
+	@Override
+	public String getDescription(Locale locale) {
+		return getBundle(locale).getString("report.jmetrics.description");
+	}
 
-    @Override
-    public String getName(Locale locale) {
-        return getBundle(locale).getString("report.jmetrics.name");
-    }
+	@Override
+	public String getName(Locale locale) {
+		return getBundle(locale).getString("report.jmetrics.name");
+	}
 
-    @Override
-    public String getOutputName() {
-        return OUTPUT_NAME;
-    }
+	@Override
+	public String getOutputName() {
+		return OUTPUT_NAME;
+	}
 
-    @Override
-    protected void executeReport(Locale locale) throws MavenReportException {
-        JMetricsApi jMetricsApi = new JMetricsApi();
-        jMetricsApi.writeMetricsToExcel(project.getBasedir().getPath(), outputDirectory.getPath());
-    }
+	@Override
+	protected void executeReport(Locale locale) throws MavenReportException {
+		JMetricsApi jMetricsApi = new JMetricsApi();
+		jMetricsApi.writeMetricsToExcel(project.getBasedir().getPath(), outputDirectory.getPath());
+	}
 
-    // helper to retrieve the right bundle
-    private static ResourceBundle getBundle(Locale locale) {
-        return ResourceBundle.getBundle("jmetrics", locale, JMetricsMojo.class.getClassLoader());
-    }
+	// helper to retrieve the right bundle
+	private static ResourceBundle getBundle(Locale locale) {
+		return ResourceBundle.getBundle("jmetrics", locale, JMetricsMojo.class.getClassLoader());
+	}
 
 }

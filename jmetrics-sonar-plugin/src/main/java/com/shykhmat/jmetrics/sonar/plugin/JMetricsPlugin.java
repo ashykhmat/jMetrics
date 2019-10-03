@@ -16,8 +16,8 @@ import com.shykhmat.jmetrics.sonar.plugin.widget.JMetricsDashboardWidget;
  */
 public class JMetricsPlugin extends SonarPlugin {
 
-    @Override
-    public List<Class<? extends Extension>> getExtensions() {
-        return Arrays.asList(JMetricsSensor.class, JMetrics.class, JMetricsDashboardWidget.class);
-    }
+	@Override
+	public List<Class<? extends Extension>> getExtensions() {
+		return Arrays.asList(JMetricsSensor.class, JMetrics.class, JMetricsDashboardWidget.class);
+	}
 }
