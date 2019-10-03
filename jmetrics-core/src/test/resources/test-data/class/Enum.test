@@ -1,0 +1,3 @@
+public enum Enum {
+	VALUE_1, VALUE_2, VALUE_3;
+}

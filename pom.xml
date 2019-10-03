@@ -14,6 +14,7 @@
 		<module>jmetrics-sonar-plugin</module>
 		<module>jmetrics-console</module>
 		<module>jmetrics-maven-plugin</module>
+		<module>build-tools</module>
 	</modules>
 
 	<properties>
@@ -25,6 +26,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+		<maven-formatter-plugin.version>2.10.0</maven-formatter-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -66,6 +68,15 @@
 	</dependencyManagement>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>net.revelc.code.formatter</groupId>
+					<artifactId>formatter-maven-plugin</artifactId>
+					<version>${maven-formatter-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -78,7 +89,6 @@
 			<plugin>
 				<groupId>net.revelc.code.formatter</groupId>
 				<artifactId>formatter-maven-plugin</artifactId>
-				<version>2.9.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -88,6 +98,8 @@
 				</executions>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
+					<configFile>code-formatter.xml</configFile>
+					<overrideConfigCompilerVersion>true</overrideConfigCompilerVersion>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -5,10 +5,10 @@ package com.shykhmat.jmetrics.core.visitor;
  */
 public class VisitorException extends Exception {
 
-    private static final long serialVersionUID = -6180418322983311573L;
+	private static final long serialVersionUID = -6180418322983311573L;
 
-    public VisitorException(Throwable cause) {
-        super(cause);
-    }
+	public VisitorException(Throwable cause) {
+		super(cause);
+	}
 
 }

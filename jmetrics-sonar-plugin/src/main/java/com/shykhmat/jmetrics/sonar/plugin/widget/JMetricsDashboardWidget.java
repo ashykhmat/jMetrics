@@ -12,18 +12,18 @@ import org.sonar.api.web.UserRole;
 @Description("Shows metrics for java project")
 public class JMetricsDashboardWidget extends AbstractRubyTemplate implements RubyRailsWidget {
 
-    @Override
-    public String getId() {
-        return "jmetrics";
-    }
+	@Override
+	public String getId() {
+		return "jmetrics";
+	}
 
-    @Override
-    public String getTitle() {
-        return "jMetrics";
-    }
+	@Override
+	public String getTitle() {
+		return "jMetrics";
+	}
 
-    @Override
-    protected String getTemplatePath() {
-        return "/widget/jmetrics_widget.html.erb";
-    }
+	@Override
+	protected String getTemplatePath() {
+		return "/widget/jmetrics_widget.html.erb";
+	}
 }

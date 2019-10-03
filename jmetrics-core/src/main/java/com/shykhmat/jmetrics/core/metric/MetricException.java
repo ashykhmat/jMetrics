@@ -6,10 +6,10 @@ package com.shykhmat.jmetrics.core.metric;
  */
 public class MetricException extends Exception {
 
-    private static final long serialVersionUID = -1294407714803698071L;
+	private static final long serialVersionUID = -1294407714803698071L;
 
-    public MetricException(Exception e) {
-        super(e);
-    }
+	public MetricException(Exception e) {
+		super(e);
+	}
 
 }

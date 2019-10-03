@@ -9,24 +9,24 @@ import java.util.TreeSet;
  */
 public class ProjectReport extends CodePartReport implements Serializable {
 
-    private static final long serialVersionUID = -5055487412966922425L;
+	private static final long serialVersionUID = -5055487412966922425L;
 
-    private Set<ClassReport> classes;
+	private Set<ClassReport> classes;
 
-    public ProjectReport(String name) {
-        super(name);
-        classes = new TreeSet<>();
-    }
+	public ProjectReport(String name) {
+		super(name);
+		classes = new TreeSet<>();
+	}
 
-    public Set<ClassReport> getClasses() {
-        return classes;
-    }
+	public Set<ClassReport> getClasses() {
+		return classes;
+	}
 
-    public void setClasses(Set<ClassReport> classes) {
-        this.classes = classes;
-    }
+	public void setClasses(Set<ClassReport> classes) {
+		this.classes = classes;
+	}
 
-    public void addClass(ClassReport classToAdd) {
-        classes.add(classToAdd);
-    }
+	public void addClass(ClassReport classToAdd) {
+		classes.add(classToAdd);
+	}
 }

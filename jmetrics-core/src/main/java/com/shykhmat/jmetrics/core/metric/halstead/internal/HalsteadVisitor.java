@@ -140,14 +140,10 @@ public class HalsteadVisitor extends ASTVisitor {
 
 	private void processPackage(String fullyQualifiedName) {
 		String[] nameParts = fullyQualifiedName.replaceAll(SEMICOLON, "").split(DOT_REGEX);
-		if (nameParts.length == 1) {
-			addOperand(fullyQualifiedName);
-		} else {
+		if (nameParts.length > 1) {
 			for (String namePart : nameParts) {
 				if (ASTERIX.equals(namePart)) {
 					addOperator(ASTERIX);
-				} else {
-					addOperand(namePart);
 				}
 			}
 			addOperator(DOT, StringUtils.countMatches(fullyQualifiedName, DOT));

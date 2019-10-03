@@ -14,7 +14,7 @@
 	<properties>
 		<poi.version>4.1.0</poi.version>
 		<guava.version>27.1-jre</guava.version>
-		<jdt.version>3.17.0</jdt.version>
+		<jdt.version>3.19.0</jdt.version>
 		<commons.version>3.9</commons.version>
 	</properties>
 
@@ -84,5 +84,22 @@
 		</dependency>
 	</dependencies>
 
-
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>net.revelc.code.formatter</groupId>
+					<artifactId>formatter-maven-plugin</artifactId>
+					<version>${maven-formatter-plugin.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>com.shykhmat.jmetrics</groupId>
+							<artifactId>build-tools</artifactId>
+							<version>${project.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
