@@ -34,7 +34,7 @@ In IDE import project as existing Maven project. IDE will load automatically all
 ## Run Console application
 
 To run jMetrics as a console application, after it was built, run the following command
-`java -jar jmetrics-console/target/jmetrics-console-1.0-SNAPSHOT.jar -projectPath PATH_TO_PROJECT -reportPath PATH_TO_REPORT`
+`java -jar jmetrics-console/target/jmetrics-console-2.0-SNAPSHOT.jar -projectPath PATH_TO_PROJECT -reportPath PATH_TO_REPORT`
 
 Parameter | Description | Example Value |
 ------------ | ------------- | ------------- |
@@ -46,11 +46,13 @@ Parameter | Description | Example Value |
 
 Sample command:
 
-`java -jar jmetrics-console/target/jmetrics-console-1.0-SNAPSHOT.jar -projectPath C:\\workspace\\my_application -reportPath C:\\report`
+`java -jar jmetrics-console/target/jmetrics-console-2.0-SNAPSHOT.jar -projectPath C:\\workspace\\my_application -reportPath C:\\report`
 
 ## Run SonarQube Plug-in
 
-To run jMetrics as a [SonarQube][] plug-in, copy jmetrics-sonar-plugin/target/jmetrics-sonar-plugin-1.0-SNAPSHOT.jar into SonarQube/extensions/plugins folder.
+NOTE: ONLY OLD VERSION OF SONARQUBE IS SUPPORTED RIGHT NOW. SUPPORT OF THE LATEST SONAR VERSION WILL BE ADDED SHORTLY!
+
+To run jMetrics as a [SonarQube][] plug-in, copy jmetrics-sonar-plugin/target/jmetrics-sonar-plugin-2.0-SNAPSHOT.jar into SonarQube/extensions/plugins folder.
 Start SonarQube and execute metrics collection on your project. This can be done executing following Maven command in your project root folder:
 
 `mvn sonar:sonar`
@@ -65,7 +67,7 @@ To run jMetrics as a [Maven][] plug-in, update your project pom.xml file and add
 <plugin>
 	<groupId>com.shykhmat</groupId>
 	<artifactId>jmetrics-maven-plugin</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 </plugin>
 ```
 
@@ -75,33 +77,8 @@ To execute metrics collection on your project and report generation, execute fol
 
 To view results, navigate into target/site folder. Report will have name YOUR_PROJECT_NAME.xsls
 
-
-## Update Java version
-
-Currently Java 10 grammar is not provided, so latest supported version is Java 9. To add support of newer Java version, you should use Anrlr to generate new Java parser, lexer and listeners.
-Current [Antlr4 Java Grammar][] that is used, provided by Antlr.
-To generate new Java parser, lexer and listeners you could create simple maven project and use antlr4-maven-plugin:
-
-```xml
-<plugin>
-    <groupId>org.antlr</groupId>
-    <artifactId>antlr4-maven-plugin</artifactId>
-    <version>4.7</version>
-    <executions>
-        <execution>
-            <goals>
-               <goal>antlr4</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-Antlr plugin gets grammar description from src/main/antlr4/\<package\>/*.g4 files, generates the code and places it into target/generated-sources/antlr4/<package>
-Use command `mvn generate-sources` to generate Java classes from grammar file.
-
 [Maven]: https://maven.apache.org/
 [Git]: http://help.github.com/set-up-git-redirect
 [JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
 [SonarQube]: https://www.sonarqube.org/
-[Antlr4 Java Grammar]: https://github.com/antlr/grammars-v4/blob/master/java9/Java9.g4
 [Microsoft Official Website]: https://blogs.msdn.microsoft.com/zainnab/2011/05/26/code-metrics-maintainability-index
