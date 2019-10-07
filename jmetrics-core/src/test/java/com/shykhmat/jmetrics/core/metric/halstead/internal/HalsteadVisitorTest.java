@@ -185,6 +185,26 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("VALUE_3", 1);
 		assertCalculations("test-data/class/EnumWithMethod.test", "ENUM", expectedOperators, expectedOperands);
 	}
+	
+
+	@Test
+	public void testLambdaVisit() {
+		Map<String, Integer> expectedOperators = new HashMap<>();
+		expectedOperators.put("=", 1);
+		expectedOperators.put("->", 1);
+		Map<String, Integer> expectedOperands = new HashMap<>();
+		expectedOperands.put("Integer", 2);
+		expectedOperands.put("System", 1);
+		expectedOperands.put("out", 1);
+		expectedOperands.put("println", 1);
+		expectedOperands.put("method", 1);
+		expectedOperands.put("x", 2);
+		expectedOperands.put("c", 1);
+		expectedOperands.put("Consumer", 1);
+		expectedOperands.put("MISSING", 1);
+		assertCalculations("test-data/class/Lambda.test", "METHOD", expectedOperators, expectedOperands);
+	}
+
 
 	private void assertCalculations(String fileName, String type, Map<String, Integer> expectedOperators,
 			Map<String, Integer> expectedOperands) {

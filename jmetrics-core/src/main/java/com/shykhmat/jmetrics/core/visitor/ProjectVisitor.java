@@ -4,6 +4,7 @@ package com.shykhmat.jmetrics.core.visitor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 
 import com.github.javaparser.JavaParser;
@@ -35,12 +36,9 @@ public class ProjectVisitor {
 			if (childFile.isDirectory()) {
 				processJavaClasses(childFile, project);
 			} else if (childFile.getName().endsWith(".java")) {
-				FileInputStream fileInputStream = new FileInputStream(childFile);
-				try {
-					CompilationUnit compilationUnit = JavaParser.parse(fileInputStream);
+				try (InputStream inputStream = new FileInputStream(childFile)) {
+					CompilationUnit compilationUnit = JavaParser.parse(inputStream);
 					new ClassVisitor(createCompositeMetric()).visit(compilationUnit, project.getClasses());
-				} finally {
-					fileInputStream.close();
 				}
 			}
 		}
