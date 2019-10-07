@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -25,6 +26,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  */
 public class HalsteadVisitor extends ASTVisitor {
 	private static final String NULL = "null";
+	private static final String LAMBDA = "->";
 	private static final String ASSIGNMENT = "=";
 	private static final String ASTERIX = "*";
 	private static final String PACKAGE = "package";
@@ -105,6 +107,12 @@ public class HalsteadVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SimpleName node) {
 		addOperand(node.getIdentifier());
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(LambdaExpression node) {
+		addOperator(LAMBDA);
 		return super.visit(node);
 	}
 

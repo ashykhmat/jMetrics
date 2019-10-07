@@ -1,0 +1,3 @@
+public void method(){
+	Consumer<Integer> c = (Integer x) -> { System.out.println(x); };
+}
