@@ -1,4 +1,4 @@
-package com.shykhmat.jmetrics.core.metric.halstead.internal;
+package com.shykhmat.jmetrics.core.metric.halstead;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 /**
  * Class to visit code nodes and calculate Halstead metrics for them.
  */
-public class HalsteadVisitor extends ASTVisitor {
+class HalsteadVisitor extends ASTVisitor {
 	private static final String NULL = "null";
 	private static final String LAMBDA = "->";
 	private static final String ASSIGNMENT = "=";

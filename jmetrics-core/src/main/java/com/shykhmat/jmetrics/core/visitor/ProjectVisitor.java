@@ -2,19 +2,14 @@
 package com.shykhmat.jmetrics.core.visitor;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.shykhmat.jmetrics.core.metric.CompositeMetric;
-import com.shykhmat.jmetrics.core.metric.cyclomatic.CyclomaticComplexityMetric;
-import com.shykhmat.jmetrics.core.metric.halstead.HalsteadVolumeMetric;
-import com.shykhmat.jmetrics.core.metric.loc.LinesOfCodeMetric;
-import com.shykhmat.jmetrics.core.metric.maintainability.MaintainabilityIndexMetric;
+import org.eclipse.jdt.core.dom.ASTNode;
+
+import com.shykhmat.jmetrics.core.metric.CodePartType;
+import com.shykhmat.jmetrics.core.parser.JavaParser;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
 
 /**
@@ -25,31 +20,24 @@ public class ProjectVisitor {
 		ProjectReport project = new ProjectReport(Paths.get(pathToProject).getFileName().toString());
 		try {
 			processJavaClasses(new File(pathToProject), project);
-		} catch (IOException | ParseException e) {
+		} catch (IOException e) {
 			throw new VisitorException(e);
 		}
 		return project;
 	}
 
-	private void processJavaClasses(File rootFile, ProjectReport project) throws IOException, ParseException {
+	private void processJavaClasses(File rootFile, ProjectReport project) throws IOException {
 		for (File childFile : rootFile.listFiles()) {
 			if (childFile.isDirectory()) {
 				processJavaClasses(childFile, project);
 			} else if (childFile.getName().endsWith(".java")) {
-				try (InputStream inputStream = new FileInputStream(childFile)) {
-					CompilationUnit compilationUnit = JavaParser.parse(inputStream);
-					new ClassVisitor(createCompositeMetric()).visit(compilationUnit, project.getClasses());
-				}
+				ASTNode compilationUnit = JavaParser.getCodePart(
+						new String(Files.readAllBytes(Paths.get(childFile.getAbsolutePath()))).toCharArray(),
+						CodePartType.CLASS);
+				CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor();
+				compilationUnitVisitor.visit(compilationUnit);
+				project.getClasses().addAll(compilationUnitVisitor.getClassesReports());
 			}
 		}
-	}
-
-	private CompositeMetric createCompositeMetric() {
-		HalsteadVolumeMetric halsteadVolumeMetric = new HalsteadVolumeMetric();
-		CyclomaticComplexityMetric cyclomaticComplexityMetric = new CyclomaticComplexityMetric();
-		LinesOfCodeMetric linesOfCodeMetric = new LinesOfCodeMetric();
-		MaintainabilityIndexMetric maintainabilityIndexMetric = new MaintainabilityIndexMetric();
-		return new CompositeMetric(halsteadVolumeMetric, cyclomaticComplexityMetric, linesOfCodeMetric,
-				maintainabilityIndexMetric);
 	}
 }

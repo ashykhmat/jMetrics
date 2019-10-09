@@ -1,0 +1,55 @@
+package com.shykhmat.jmetrics.core.metric.halstead.internal;
+
+import java.util.Collections;
+import java.util.List;
+
+public class LargeClass {
+	private String variable;
+
+	public LargeClass(String variable) {
+		this.variable = variable;
+	}
+
+	public String getVariable() {
+		return variable;
+	}
+
+	public Boolean validateVariable() {
+		try {
+			switch (variable) {
+			case "A":
+				break;
+			default:
+				break;
+			}
+
+			int counter = 1;
+			do {
+				counter++;
+			} while (counter > 0 && variable != null);
+
+			while (counter <= 0 && variable != null) {
+				counter++;
+			}
+
+			for (int i = 0; i < 10 && variable != null; i++) {
+				counter++;
+			}
+
+			List<String> list = Collections.emptyList();
+			for (String str : list) {
+				System.out.println(str);
+			}
+
+			if (variable != null && !"".equals(variable) && !"2".equals(variable)) {
+				return variable != null && !"".equals(variable);
+			} else {
+				return variable != null && !"".equals(variable);
+			}
+
+		} catch (Throwable e) {
+			throw e;
+		}
+	}
+
+}
