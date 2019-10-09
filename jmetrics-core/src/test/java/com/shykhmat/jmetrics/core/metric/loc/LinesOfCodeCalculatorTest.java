@@ -14,7 +14,7 @@ import com.shykhmat.jmetrics.core.metric.CodePartType;
 import com.shykhmat.jmetrics.core.parser.JavaParser;
 
 public class LinesOfCodeCalculatorTest {
-	
+
 	@Test
 	public void testLargeClass() throws IOException {
 		assertCalculations("test-data/class/LargeClass.test", CodePartType.CLASS, 46);

@@ -109,7 +109,7 @@ class HalsteadVisitor extends ASTVisitor {
 		addOperand(node.getIdentifier());
 		return super.visit(node);
 	}
-	
+
 	@Override
 	public boolean visit(LambdaExpression node) {
 		addOperator(LAMBDA);

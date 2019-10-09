@@ -190,7 +190,6 @@ public class HalsteadComplexityCalculatorTest {
 		assertCalculations("test-data/class/EnumWithMethod.test", CodePartType.ENUM, expectedOperators,
 				expectedOperands);
 	}
-	
 
 	@Test
 	public void testLambdaVisit() {
@@ -207,9 +206,8 @@ public class HalsteadComplexityCalculatorTest {
 		expectedOperands.put("c", 1);
 		expectedOperands.put("Consumer", 1);
 		expectedOperands.put("MISSING", 1);
-		assertCalculations("test-data/class/Lambda.test", "METHOD", expectedOperators, expectedOperands);
+		assertCalculations("test-data/class/Lambda.test", CodePartType.METHOD, expectedOperators, expectedOperands);
 	}
-
 
 	private void assertCalculations(String filePath, CodePartType type, Map<String, Integer> expectedOperators,
 			Map<String, Integer> expectedOperands) {

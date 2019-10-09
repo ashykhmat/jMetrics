@@ -18,7 +18,7 @@ public class CyclomaticComplexityCalculatorTest {
 	public void testLargeClass() throws IOException {
 		assertCalculations("test-data/class/LargeClass.test", CodePartType.CLASS, 17);
 	}
-	
+
 	private void assertCalculations(String filePath, CodePartType type, Integer expectedCyclomaticComplexity) {
 		CyclomaticComplexityCalculator cyclomaticComplexityCalculator = new CyclomaticComplexityCalculator();
 		try {
