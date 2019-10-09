@@ -1,4 +1,4 @@
-package com.shykhmat.jmetrics.core.metric.halstead.internal;
+package com.shykhmat.jmetrics.core.metric.halstead;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -8,23 +8,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.junit.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.shykhmat.jmetrics.core.metric.CodePartType;
+import com.shykhmat.jmetrics.core.parser.JavaParser;
 
-public class HalsteadVisitorTest {
-
-	private static final String JAVA_VERSION = JavaCore.VERSION_12;
+public class HalsteadComplexityCalculatorTest {
 
 	@Test
 	public void testEmptyPackageVisit() {
 		Map<String, Integer> expectedOperators = new HashMap<>();
 		Map<String, Integer> expectedOperands = new HashMap<>();
-		assertCalculations("test-data/package/EmptyPackageName.test", "PACKAGE", expectedOperators, expectedOperands);
+		assertCalculations("test-data/package/EmptyPackageName.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -34,7 +33,8 @@ public class HalsteadVisitorTest {
 		expectedOperators.put("package", 1);
 		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("test", 1);
-		assertCalculations("test-data/package/SimplePackageName.test", "PACKAGE", expectedOperators, expectedOperands);
+		assertCalculations("test-data/package/SimplePackageName.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -47,7 +47,8 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertCalculations("test-data/package/ComplexPackageName.test", "PACKAGE", expectedOperators, expectedOperands);
+		assertCalculations("test-data/package/ComplexPackageName.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -60,15 +61,15 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertCalculations("test-data/package/PackageNameAndAdditionalSemicolon.test", "PACKAGE", expectedOperators,
-				expectedOperands);
+		assertCalculations("test-data/package/PackageNameAndAdditionalSemicolon.test", CodePartType.NONE,
+				expectedOperators, expectedOperands);
 	}
 
 	@Test
 	public void testEmptyImportVisit() {
 		Map<String, Integer> expectedOperators = new HashMap<>();
 		Map<String, Integer> expectedOperands = new HashMap<>();
-		assertCalculations("test-data/import/EmptyImport.test", "IMPORT", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/EmptyImport.test", CodePartType.NONE, expectedOperators, expectedOperands);
 	}
 
 	@Test
@@ -80,7 +81,8 @@ public class HalsteadVisitorTest {
 		Map<String, Integer> expectedOperands = new HashMap<>();
 		expectedOperands.put("test", 1);
 		expectedOperands.put("Test", 1);
-		assertCalculations("test-data/import/SimpleImport.test", "IMPORT", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/SimpleImport.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -94,7 +96,8 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
 		expectedOperands.put("Test", 1);
-		assertCalculations("test-data/import/ComplexImport.test", "IMPORT", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/ComplexImport.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -108,7 +111,7 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("com", 1);
 		expectedOperands.put("shykhmat", 1);
 		expectedOperands.put("test", 1);
-		assertCalculations("test-data/import/ImportAll.test", "IMPORT", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/ImportAll.test", CodePartType.NONE, expectedOperators, expectedOperands);
 	}
 
 	@Test
@@ -124,7 +127,8 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("test", 2);
 		expectedOperands.put("Test1", 1);
 		expectedOperands.put("Test2", 1);
-		assertCalculations("test-data/import/MultipleImports.test", "IMPORT", expectedOperators, expectedOperands);
+		assertCalculations("test-data/import/MultipleImports.test", CodePartType.NONE, expectedOperators,
+				expectedOperands);
 	}
 
 	@Test
@@ -139,7 +143,7 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("method", 1);
 		expectedOperands.put("4", 1);
 		expectedOperands.put("MISSING", 1);
-		assertCalculations("test-data/class/Method.test", "METHOD", expectedOperators, expectedOperands);
+		assertCalculations("test-data/class/Method.test", CodePartType.METHOD, expectedOperators, expectedOperands);
 	}
 
 	@Test
@@ -154,7 +158,7 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("method", 1);
 		expectedOperands.put("4", 1);
 		expectedOperands.put("A", 1);
-		assertCalculations("test-data/class/Class.test", "CLASS", expectedOperators, expectedOperands);
+		assertCalculations("test-data/class/Class.test", CodePartType.CLASS, expectedOperators, expectedOperands);
 	}
 
 	@Test
@@ -165,7 +169,7 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("VALUE_1", 1);
 		expectedOperands.put("VALUE_2", 1);
 		expectedOperands.put("VALUE_3", 1);
-		assertCalculations("test-data/class/Enum.test", "ENUM", expectedOperators, expectedOperands);
+		assertCalculations("test-data/class/Enum.test", CodePartType.ENUM, expectedOperators, expectedOperands);
 	}
 
 	@Test
@@ -183,33 +187,23 @@ public class HalsteadVisitorTest {
 		expectedOperands.put("VALUE_1", 1);
 		expectedOperands.put("VALUE_2", 1);
 		expectedOperands.put("VALUE_3", 1);
-		assertCalculations("test-data/class/EnumWithMethod.test", "ENUM", expectedOperators, expectedOperands);
+		assertCalculations("test-data/class/EnumWithMethod.test", CodePartType.ENUM, expectedOperators,
+				expectedOperands);
 	}
 
-	private void assertCalculations(String fileName, String type, Map<String, Integer> expectedOperators,
+	private void assertCalculations(String filePath, CodePartType type, Map<String, Integer> expectedOperators,
 			Map<String, Integer> expectedOperands) {
-		HalsteadVisitor halsteadVisitor = new HalsteadVisitor();
+		HalsteadComplexityCalculator halsteadComplexityCalculator = new HalsteadComplexityCalculator();
 		try {
-			parseCode(fileName, type).accept(halsteadVisitor);
-			assertThat(halsteadVisitor.getOperands().size(), is(expectedOperands.size()));
-			assertThat(halsteadVisitor.getOperands(), is(expectedOperands));
-			assertThat(halsteadVisitor.getOperators().size(), is(expectedOperators.size()));
-			assertThat(halsteadVisitor.getOperators(), is(expectedOperators));
+			ASTNode codeToTest = JavaParser.getCodePart(
+					Resources.toString(Resources.getResource(filePath), Charsets.UTF_8).toCharArray(), type);
+			HalsteadComplexityMetrics metrics = halsteadComplexityCalculator.calculateMetric(codeToTest);
+			assertThat(metrics.getOperands().size(), is(expectedOperands.size()));
+			assertThat(metrics.getOperands(), is(expectedOperands));
+			assertThat(metrics.getOperators().size(), is(expectedOperators.size()));
+			assertThat(metrics.getOperators(), is(expectedOperators));
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
-	}
-
-	private ASTNode parseCode(String filePath, String type) throws IOException {
-		ASTParser parser = ASTParser.newParser(Integer.parseInt(JAVA_VERSION));
-		Map<String, String> compilerOptions = JavaCore.getOptions();
-		compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JAVA_VERSION);
-		compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JAVA_VERSION);
-		compilerOptions.put(JavaCore.COMPILER_SOURCE, JAVA_VERSION);
-		parser.setCompilerOptions(compilerOptions);
-		parser.setSource(Resources.toString(Resources.getResource(filePath), Charsets.UTF_8).toCharArray());
-		parser.setKind("METHOD".equals(type) ? ASTParser.K_CLASS_BODY_DECLARATIONS : ASTParser.K_COMPILATION_UNIT);
-		parser.setResolveBindings(true);
-		return parser.createAST(null);
 	}
 }

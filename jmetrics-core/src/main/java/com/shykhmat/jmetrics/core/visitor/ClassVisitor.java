@@ -1,87 +1,63 @@
 package com.shykhmat.jmetrics.core.visitor;
 
-import java.util.Set;
-
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.shykhmat.jmetrics.core.metric.CompositeMetric;
-import com.shykhmat.jmetrics.core.metric.MetricException;
+import com.shykhmat.jmetrics.core.metric.CodePartType;
 import com.shykhmat.jmetrics.core.report.ClassReport;
-import com.shykhmat.jmetrics.core.metric.CodePart;
 
 /**
  * Class that contains functionality to collect metrics for java classes,
  * interfaces, enums and annotations.
  */
-public class ClassVisitor extends VoidVisitorAdapter<Set<ClassReport>> {
+public class ClassVisitor extends AbstractVisitor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassVisitor.class);
-	private CompositeMetric compositeMetric;
-
-	public ClassVisitor(CompositeMetric compositeMetric) {
-		this.compositeMetric = compositeMetric;
-	}
-
-	// TODO refactor
+	private ClassReport classReport;
 
 	@Override
-	public void visit(AnnotationDeclaration annotationDeclaration, Set<ClassReport> classes) {
-		PackageDeclaration packageDeclaration = ((CompilationUnit) annotationDeclaration.getParentNode().orElse(null))
-				.getPackageDeclaration().orElse(null);
-		ClassReport classToAdd = new ClassReport(packageDeclaration == null ? annotationDeclaration.getName().asString()
-				: packageDeclaration.getNameAsString() + "." + annotationDeclaration.getName().asString());
-		classToAdd.setInterface(false);
-		LOGGER.debug("Processing annotation: " + classToAdd.getName());
-		new MethodVisitor(compositeMetric).visit(annotationDeclaration, classToAdd.getMethods());
-		try {
-			CodePart codePart = new CodePart(annotationDeclaration, CodePart.CodePartType.ANNOTATION);
-			classToAdd.setMetrics(compositeMetric.calculateMetric(codePart));
-		} catch (MetricException e) {
-			LOGGER.error("Error during calulation class metrics", e);
-		}
-		classes.add(classToAdd);
+	public boolean visit(AnnotationTypeDeclaration annotationTypeDeclaration) {
+		processDeclaration(annotationTypeDeclaration, CodePartType.ANNOTATION);
+		return super.visit(annotationTypeDeclaration);
 	}
 
 	@Override
-	public void visit(EnumDeclaration enumDeclaration, Set<ClassReport> classes) {
-		PackageDeclaration packageDeclaration = ((CompilationUnit) enumDeclaration.getParentNode().orElse(null))
-				.getPackageDeclaration().orElse(null);
-		ClassReport classToAdd = new ClassReport(packageDeclaration == null ? enumDeclaration.getName().asString()
-				: packageDeclaration.getNameAsString() + "." + enumDeclaration.getName().asString());
-		classToAdd.setInterface(false);
-		LOGGER.debug("Processing enum: " + classToAdd.getName());
-		new MethodVisitor(compositeMetric).visit(enumDeclaration, classToAdd.getMethods());
-		try {
-			CodePart codePart = new CodePart(enumDeclaration, CodePart.CodePartType.ENUM);
-			classToAdd.setMetrics(compositeMetric.calculateMetric(codePart));
-		} catch (Exception e) {
-			LOGGER.error("Error during calulation class metrics", e);
-		}
-		classes.add(classToAdd);
+	public boolean visit(EnumDeclaration enumDeclaration) {
+		processDeclaration(enumDeclaration, CodePartType.ENUM);
+		return super.visit(enumDeclaration);
 	}
 
 	@Override
-	public void visit(ClassOrInterfaceDeclaration classDeclaration, Set<ClassReport> classes) {
-		PackageDeclaration packageDeclaration = ((CompilationUnit) classDeclaration.getParentNode().orElse(null))
-				.getPackageDeclaration().orElse(null);
-		ClassReport classToAdd = new ClassReport(packageDeclaration == null ? classDeclaration.getName().asString()
-				: packageDeclaration.getNameAsString() + "." + classDeclaration.getName().asString());
-		classToAdd.setInterface(classDeclaration.isInterface());
-		LOGGER.debug("Processing class/interface: " + classToAdd.getName());
-		new MethodVisitor(compositeMetric).visit(classDeclaration, classToAdd.getMethods());
-		try {
-			CodePart codePart = new CodePart(classDeclaration,
-					classToAdd.isInterface() ? CodePart.CodePartType.INTERFACE : CodePart.CodePartType.CLASS);
-			classToAdd.setMetrics(compositeMetric.calculateMetric(codePart));
-		} catch (MetricException e) {
-			LOGGER.error("Error during calulation class metrics", e);
-		}
-		classes.add(classToAdd);
+	public boolean visit(TypeDeclaration typeDeclaration) {
+		processDeclaration(typeDeclaration,
+				typeDeclaration.isInterface() ? CodePartType.INTERFACE : CodePartType.CLASS);
+		return super.visit(typeDeclaration);
 	}
+
+	@SuppressWarnings("unchecked")
+	private void processDeclaration(AbstractTypeDeclaration node, CodePartType codeType) {
+		PackageDeclaration packageDeclaration = ((CompilationUnit) node.getParent()).getPackage();
+		String packageName = packageDeclaration != null ? packageDeclaration.getName().getFullyQualifiedName() + "."
+				: "";
+		String fullyQualifiedTypeName = packageName + node.getName().getFullyQualifiedName();
+		LOGGER.debug("Processing {} {}", codeType, fullyQualifiedTypeName);
+		classReport = new ClassReport(fullyQualifiedTypeName);
+		classReport.setInterface(CodePartType.INTERFACE.equals(codeType));
+		MethodVisitor methodVisitor = new MethodVisitor();
+		node.bodyDeclarations().stream().filter(body -> body instanceof MethodDeclaration)
+				.forEach(method -> methodVisitor.visit((MethodDeclaration) method));
+		classReport.setMetrics(compositeMetricCalculator.calculateMetric(node));
+		classReport.setMethods(methodVisitor.getMethodsReports());
+	}
+
+	protected ClassReport getClassReport() {
+		return classReport;
+	}
+
 }
