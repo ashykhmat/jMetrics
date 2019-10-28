@@ -23,15 +23,12 @@ public final class JMetrics implements Metrics {
 	static {
 		@SuppressWarnings("rawtypes")
 		final ImmutableList.Builder<Metric> builder = ImmutableList.builder();
-
-		JMETRICS = new Metric.Builder("jmetrics_java", "jMetrics", Metric.ValueType.DATA).setDomain(DOMAIN)
+		JMETRICS = new Metric.Builder("jmetrics", "jMetrics", Metric.ValueType.DATA).setDomain(DOMAIN)
 				.setDirection(Metric.DIRECTION_WORST).create();
 		builder.add(JMETRICS);
-
-		JMETRICS_EXCEL = new Metric.Builder("jmetrics_excel_java", "jMetrics Excel", Metric.ValueType.DATA)
-				.setDomain(DOMAIN).setDirection(Metric.DIRECTION_WORST).create();
+		JMETRICS_EXCEL = new Metric.Builder("jmetrics_excel", "jMetrics Excel", Metric.ValueType.DATA).setDomain(DOMAIN)
+				.setDirection(Metric.DIRECTION_WORST).create();
 		builder.add(JMETRICS_EXCEL);
-
 		METRICS = builder.build();
 	}
 

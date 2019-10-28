@@ -12,6 +12,10 @@
 	<name>jMetrics Sonar Plug-in</name>
 	<description>Plug-in for Sonar to calculate different metrics for Java project and to display appropriate report</description>
 
+	<properties>
+		<sonar.api.version>8.0</sonar.api.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.shykhmat.jmetrics</groupId>
@@ -19,9 +23,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
+			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
-			<version>5.1</version>
+			<version>${sonar.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -67,11 +71,45 @@
 				<version>1.18.0.372</version>
 				<extensions>true</extensions>
 				<configuration>
-					<pluginKey>jMetrics</pluginKey>
+					<pluginKey>jmetrics</pluginKey>
 					<pluginClass>com.shykhmat.jmetrics.sonar.plugin.JMetricsPlugin</pluginClass>
 					<pluginName>Sonar jMetrics Plugin</pluginName>
 					<pluginDescription>Calculates different metrics</pluginDescription>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<id>install node and yarn</id>
+						<goals>
+							<goal>install-node-and-yarn</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v8.5.0</nodeVersion>
+							<yarnVersion>v1.1.0</yarnVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>yarn install</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+					</execution>
+					<execution>
+						<phase>generate-resources</phase>
+						<id>yarn run script</id>
+						<goals>
+							<goal>yarn</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
