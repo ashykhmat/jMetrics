@@ -1,0 +1,91 @@
+.accordion, .accordion * {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.accordion {
+	overflow: hidden;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
+	border-radius: 3px;
+	background: #f7f7f7;
+}
+
+.accordion-section-title {
+	width: 100%;
+	transition: all linear 0.15s;
+	font-size: 14px;
+	color: rgb(14, 81, 111);
+    display: inline-block;
+    border-width: 1px;
+    border-style: solid;
+    border-image: initial;
+    border-radius: 2px;
+    border-color: rgb(177, 223, 243);
+	color: #0E516F;
+	background: rgb(217, 237, 247);
+}
+
+.accordion-section-title a:active, a:focus, a:hover {
+}
+
+.accordion-section-title.active, .accordion-section-title:hover {
+	background: #b1dcf3;
+	text-decoration: none;
+}
+
+.accordion-section:last-child .accordion-section-title {
+	border-bottom: none;
+}
+
+.accordion-section-content {
+	padding: 15px;
+	display: none;
+	background: #fff;
+}
+
+.scrollable-div {
+}
+
+.full-width {
+	width: 100%; 
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.large-width {
+	padding: 5px;
+	width: 80%;
+	word-wrap: break-word;
+}
+
+.small-width {
+	width: 15%;
+}
+
+.small-margin {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.withSidesPadding {
+	padding: 0 10% 0 10%;
+}
+
+.large-label {
+	width: 87%;
+	font-size: 16px;
+	line-height: 1.2;
+	font-weight: 600;
+	padding-left: 10px;
+}
+
+.jmetrics-row {
+	width: 60%; 
+	vertical-align: top; 
+	padding: 0 0 0 0;
+}
+
+.medium-button {
+	min-width: 120px;
+}

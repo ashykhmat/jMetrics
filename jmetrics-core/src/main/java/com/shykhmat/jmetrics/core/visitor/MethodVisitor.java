@@ -1,7 +1,7 @@
 package com.shykhmat.jmetrics.core.visitor;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -15,7 +15,7 @@ import com.shykhmat.jmetrics.core.report.MethodReport;
  */
 public class MethodVisitor extends AbstractVisitor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassVisitor.class);
-	private Set<MethodReport> methodsReports = new HashSet<>();
+	private Set<MethodReport> methodsReports = new TreeSet<>();
 
 	public Set<MethodReport> getMethodsReports() {
 		return methodsReports;

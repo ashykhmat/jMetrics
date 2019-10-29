@@ -50,14 +50,12 @@ Sample command:
 
 ## Run SonarQube Plug-in
 
-NOTE: ONLY OLD VERSION OF SONARQUBE IS SUPPORTED RIGHT NOW. SUPPORT OF THE LATEST SONAR VERSION WILL BE ADDED SHORTLY!
-
-To run jMetrics as a [SonarQube][] plug-in, copy jmetrics-sonar-plugin/target/jmetrics-sonar-plugin-2.0-SNAPSHOT.jar into SonarQube/extensions/plugins folder.
+To run jMetrics as a [SonarQube][] plug-in, copy jmetrics-sonar-plugin/target/jmetrics-sonar-plugin-2.0-SNAPSHOT.jar into SonarQube/extensions/plugins folder. 
 Start SonarQube and execute metrics collection on your project. This can be done executing following Maven command in your project root folder:
 
 `mvn sonar:sonar`
 
-To view results, configure SonarQube dashboard for your project. Add custom widget called **jMetrics**
+To view results, navigate to project page in SonarQube, click "More" and open page called **jMetrics Page**
 
 ## Run Maven Plug-in
 
