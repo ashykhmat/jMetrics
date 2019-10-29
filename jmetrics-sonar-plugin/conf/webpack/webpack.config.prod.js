@@ -11,7 +11,7 @@ if (env['process.env.NODE_ENV'] !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-const noUglify = true; //process.argv.some(arg => arg.indexOf('--no-uglify') > -1);
+const noUglify = process.argv.some(arg => arg.indexOf('--no-uglify') > -1);
 
 // Don't attempt to continue if there are any errors.
 config.bail = true;
