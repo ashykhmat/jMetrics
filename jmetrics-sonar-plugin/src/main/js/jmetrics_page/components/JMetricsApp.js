@@ -51,11 +51,30 @@ export default class JMetricsApp extends React.PureComponent {
 			var target = e.target.closest('a');
 			var isAlreadyActive = target.classList.contains('active');
 	        var currentAttrValue = target.getAttribute("href");
+	        var previousActiveElement =  $('.accordion-section-title.active');
 	        $('.accordion-section-title.active').removeClass('active');
-	        $('.accordion-section-content.open').slideUp(200).removeClass('open');
+	        $('.accordion-section-content.open').slideUp(100, function() {
+	        	if (isAlreadyActive) {
+	        		let elementToScrollTo = previousActiveElement.parent().prevAll('.accordion-section:first');
+	        		if (elementToScrollTo.offset() == undefined){
+	        			elementToScrollTo = previousActiveElement;
+	        		}	
+	                $('html, body').animate({
+	                    scrollTop: elementToScrollTo.offset().top - 200
+	                }, 100);
+	        	}
+            }).removeClass('open');
 	        if(!isAlreadyActive) {
 	        	target.classList.add('active');
-	            $(currentAttrValue).slideDown(200).addClass('open');
+	            $(currentAttrValue).slideDown(100, function() {
+                	let elementToScrollTo = $('.accordion-section-title.active').parent().prevAll('.accordion-section:first');
+	        		if (elementToScrollTo.offset() == undefined){
+	        			elementToScrollTo = $('.accordion-section-title.active');
+	        		}	
+	                $('html, body').animate({
+	                    scrollTop: elementToScrollTo.offset().top - 200
+	                }, 100);
+	            }).addClass('open');
 	        } 
 	        return false;
 	    };   
@@ -69,7 +88,7 @@ export default class JMetricsApp extends React.PureComponent {
 		this.reader.readAsDataURL(blob);
 				
 		return (
-			<div class="dashbox withoutPadding">
+			<div class="dashbox withSidesPadding">
 				<table class="width100">
 				   <tbody>
 				      <tr>
@@ -81,7 +100,7 @@ export default class JMetricsApp extends React.PureComponent {
 				                        <span class="small-margin">jMetrics</span>
 				                     </td>
 				                     <td>
-				                        <a href="#" id="exportToExcel" class="button small-margin" onClick={e => this.exportToExcel(e)}>Export To Excel</a>
+				                        <a href="#" id="exportToExcel" class="button medium-button small-margin" onClick={e => this.exportToExcel(e)}>Export To Excel</a>
 				                     </td>
 				                  </tr>
 				                  <tr>
