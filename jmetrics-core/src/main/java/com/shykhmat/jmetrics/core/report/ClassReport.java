@@ -10,6 +10,10 @@ public class ClassReport extends CodePartReport implements Comparable<ClassRepor
 	private Set<MethodReport> methods;
 	private boolean isInterface;
 
+	public ClassReport() {
+		this(null);
+	}
+
 	public ClassReport(String name) {
 		super(name);
 		methods = new TreeSet<>();

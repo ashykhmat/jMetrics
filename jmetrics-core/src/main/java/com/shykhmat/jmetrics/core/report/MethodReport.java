@@ -5,6 +5,10 @@ package com.shykhmat.jmetrics.core.report;
  */
 public class MethodReport extends CodePartReport implements Comparable<MethodReport> {
 
+	public MethodReport() {
+		this(null);
+	}
+
 	public MethodReport(String name) {
 		super(name);
 	}

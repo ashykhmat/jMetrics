@@ -18,6 +18,7 @@ public final class JMetrics implements Metrics {
 	private static final List<Metric> METRICS;
 
 	public static final Metric<String> JMETRICS;
+	public static final Metric<String> JMETRICS_HTML;
 	public static final Metric<String> JMETRICS_EXCEL;
 
 	static {
@@ -26,6 +27,9 @@ public final class JMetrics implements Metrics {
 		JMETRICS = new Metric.Builder("jmetrics", "jMetrics", Metric.ValueType.DATA).setDomain(DOMAIN)
 				.setDirection(Metric.DIRECTION_WORST).create();
 		builder.add(JMETRICS);
+		JMETRICS_HTML = new Metric.Builder("jmetrics_html", "jMetrics HTML", Metric.ValueType.DATA).setDomain(DOMAIN)
+				.setDirection(Metric.DIRECTION_WORST).create();
+		builder.add(JMETRICS_HTML);
 		JMETRICS_EXCEL = new Metric.Builder("jmetrics_excel", "jMetrics Excel", Metric.ValueType.DATA).setDomain(DOMAIN)
 				.setDirection(Metric.DIRECTION_WORST).create();
 		builder.add(JMETRICS_EXCEL);
