@@ -13,6 +13,10 @@ public class ProjectReport extends CodePartReport implements Serializable {
 
 	private Set<ClassReport> classes;
 
+	public ProjectReport() {
+		this(null);
+	}
+
 	public ProjectReport(String name) {
 		super(name);
 		classes = new TreeSet<>();
