@@ -1,0 +1,17 @@
+package com.shykhmat.test;
+
+import com.shykhmat.a.A;
+import com.shykhmat.unused.Unused;
+import com.shykhmat.all.a.*;
+import com.shykhmat.all.b.*;
+
+@SamePackageMarkerAnnotation
+@SamePackageSingleMemberAnnotation(Constants.DEFAULT_NAME)
+@SamePackageNormalAnnotation(ref = Reference.INSTANCE, value = "value")
+public enum Enum {
+	VALUE_1, VALUE_2, VALUE_3;
+	
+	public void doSmth(A input, ImportA importA, ImportB importB);
+		int a = 3;
+	}
+}

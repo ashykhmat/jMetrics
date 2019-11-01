@@ -26,6 +26,7 @@ import com.shykhmat.jmetrics.core.metric.MetricStatusResolver;
 import com.shykhmat.jmetrics.core.metric.Status;
 import com.shykhmat.jmetrics.core.report.ClassReport;
 import com.shykhmat.jmetrics.core.report.MethodReport;
+import com.shykhmat.jmetrics.core.report.PackageReport;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
 
 /**
@@ -70,6 +71,9 @@ public class ExcelWriter {
 		Map<Status, CellStyle> statusCellStyles = prepareStatusCellStyles(workbook);
 		writeClassesMetrics(project, workbook, statusCellStyles);
 		writeMethodsMetrics(project, workbook, statusCellStyles);
+		writeClassesCouplings(project, workbook);
+		writePackageMetrics(project, workbook);
+		writePackagesCouplings(project, workbook);
 		return workbook;
 	}
 
@@ -119,7 +123,7 @@ public class ExcelWriter {
 
 	private void writeClassesMetrics(ProjectReport project, Workbook workbook,
 			Map<Status, CellStyle> statusCellStyles) {
-		Sheet worksheet = createClassesSheet(workbook);
+		Sheet worksheet = createSheet(workbook, "Classes");
 		createClassesHeader(worksheet);
 		int index = 1;
 		for (ClassReport concreteClass : project.getClasses()) {
@@ -129,7 +133,18 @@ public class ExcelWriter {
 			row.createCell(2).setCellValue(concreteClass.getMetrics().getCyclomaticComplexity());
 			row.createCell(3).setCellValue(concreteClass.getMetrics().getLinesOfCode());
 			row.createCell(4).setCellValue(concreteClass.getMetrics().getHalsteadVolume());
+			row.createCell(5).setCellValue(concreteClass.getEfferentCouplingUsed().size());
+			row.createCell(6).setCellValue(concreteClass.getAfferentCouplingUsed().size());
+			row.createCell(7).setCellValue(concreteClass.getInstability());
 		}
+	}
+
+	private Sheet createSheet(Workbook workbook, String name) {
+		int sheetIndex = workbook.getSheetIndex(name);
+		if (sheetIndex >= 0) {
+			workbook.removeSheetAt(sheetIndex);
+		}
+		return workbook.createSheet(name);
 	}
 
 	private void createMaintainabilityIndexCell(Map<Status, CellStyle> statusCellStyles, Double maintainabilityIndex,
@@ -147,19 +162,14 @@ public class ExcelWriter {
 		header.createCell(2).setCellValue("Cyclomatic Complexity");
 		header.createCell(3).setCellValue("Lines Of Code");
 		header.createCell(4).setCellValue("Halstead Volume");
-	}
-
-	private Sheet createClassesSheet(Workbook workbook) {
-		int classesSheetIndex = workbook.getSheetIndex("Classes");
-		if (classesSheetIndex >= 0) {
-			workbook.removeSheetAt(classesSheetIndex);
-		}
-		return workbook.createSheet("Classes");
+		header.createCell(5).setCellValue("Efferent Coupling");
+		header.createCell(6).setCellValue("Afferent Coupling");
+		header.createCell(7).setCellValue("Instability");
 	}
 
 	private void writeMethodsMetrics(ProjectReport project, Workbook workbook,
 			Map<Status, CellStyle> statusCellStyles) {
-		Sheet worksheet = createMethodsSheet(workbook);
+		Sheet worksheet = createSheet(workbook, "Methods");
 		createMethodsHeader(worksheet);
 		int index = 1;
 		for (ClassReport concreteClass : project.getClasses()) {
@@ -183,12 +193,106 @@ public class ExcelWriter {
 		header.createCell(4).setCellValue("Halstead Volume");
 	}
 
-	private Sheet createMethodsSheet(Workbook workbook) {
-		int methodsSheetIndex = workbook.getSheetIndex("Methods");
-		if (methodsSheetIndex >= 0) {
-			workbook.removeSheetAt(methodsSheetIndex);
+	private void writePackageMetrics(ProjectReport project, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, "Packages");
+		createPackagesHeader(worksheet);
+		int index = 1;
+		for (PackageReport concretePackage : project.getPackages()) {
+			Row row = worksheet.createRow(index++);
+			row.createCell(0).setCellValue(concretePackage.getName());
+			row.createCell(1).setCellValue(concretePackage.getAbstractClassesInterfacesNumber());
+			row.createCell(2).setCellValue(concretePackage.getNonAbstractClassesNumber());
+			row.createCell(3).setCellValue(concretePackage.getAbstractness());
+			row.createCell(4).setCellValue(concretePackage.getEfferentCouplingUsed().size());
+			row.createCell(5).setCellValue(concretePackage.getAfferentCouplingUsed().size());
+			row.createCell(6).setCellValue(concretePackage.getInstability());
+			row.createCell(7).setCellValue(concretePackage.getDistance());
 		}
-		return workbook.createSheet("Methods");
+		;
+	}
+
+	private void createPackagesHeader(Sheet worksheet) {
+		Row header = worksheet.createRow(0);
+		header.createCell(0).setCellValue("Package");
+		header.createCell(1).setCellValue("Abstract Classes and Interfaces");
+		header.createCell(2).setCellValue("Non-Abstract Classes");
+		header.createCell(3).setCellValue("Abstractness");
+		header.createCell(4).setCellValue("Efferent Coupling");
+		header.createCell(5).setCellValue("Afferent Coupling");
+		header.createCell(6).setCellValue("Instability");
+		header.createCell(7).setCellValue("Distance");
+	}
+
+	private void writeClassesCouplings(ProjectReport project, Workbook workbook) {
+		writeClassesEfferentCouplings(project, workbook);
+		writeClassesAfferentCouplings(project, workbook);
+	}
+
+	private void writeClassesEfferentCouplings(ProjectReport project, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, "Classes Efferent Couplings");
+		createCouplingsHeader(worksheet, "Class", "Uses");
+		int index = 1;
+		for (ClassReport concreteClass : project.getClasses()) {
+			String className = concreteClass.getName();
+			for (String coupling : concreteClass.getEfferentCouplingUsed()) {
+				Row row = worksheet.createRow(index++);
+				row.createCell(0).setCellValue(className);
+				row.createCell(1).setCellValue(coupling);
+			}
+		}
+	}
+
+	private void writeClassesAfferentCouplings(ProjectReport project, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, "Classes Afferent Couplings");
+		createCouplingsHeader(worksheet, "Class", "Used By");
+		int index = 1;
+		for (ClassReport concreteClass : project.getClasses()) {
+			String className = concreteClass.getName();
+			for (String coupling : concreteClass.getAfferentCouplingUsed()) {
+				Row row = worksheet.createRow(index++);
+				row.createCell(0).setCellValue(className);
+				row.createCell(1).setCellValue(coupling);
+			}
+		}
+	}
+
+	private void writePackagesCouplings(ProjectReport project, Workbook workbook) {
+		writePackagesEfferentCouplings(project, workbook);
+		writePackagesAfferentCouplings(project, workbook);
+	}
+
+	private void writePackagesEfferentCouplings(ProjectReport project, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, "Packages Efferent Couplings");
+		createCouplingsHeader(worksheet, "Package", "Uses");
+		int index = 1;
+		for (PackageReport concretePackage : project.getPackages()) {
+			String packageName = concretePackage.getName();
+			for (String coupling : concretePackage.getEfferentCouplingUsed()) {
+				Row row = worksheet.createRow(index++);
+				row.createCell(0).setCellValue(packageName);
+				row.createCell(1).setCellValue(coupling);
+			}
+		}
+	}
+
+	private void writePackagesAfferentCouplings(ProjectReport project, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, "Packages Afferent Couplings");
+		createCouplingsHeader(worksheet, "Package", "Used By");
+		int index = 1;
+		for (PackageReport concretePackage : project.getPackages()) {
+			String packageName = concretePackage.getName();
+			for (String coupling : concretePackage.getAfferentCouplingUsed()) {
+				Row row = worksheet.createRow(index++);
+				row.createCell(0).setCellValue(packageName);
+				row.createCell(1).setCellValue(coupling);
+			}
+		}
+	}
+
+	private void createCouplingsHeader(Sheet worksheet, String unitType, String couplingLabel) { // uses, used by
+		Row header = worksheet.createRow(0);
+		header.createCell(0).setCellValue(unitType);
+		header.createCell(1).setCellValue(couplingLabel);
 	}
 
 }

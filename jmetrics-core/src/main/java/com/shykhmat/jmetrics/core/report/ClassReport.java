@@ -6,9 +6,9 @@ import java.util.TreeSet;
 /**
  * Class that contains report information for java class.
  */
-public class ClassReport extends CodePartReport implements Comparable<ClassReport> {
+public class ClassReport extends ExtendedCodePartReport implements Comparable<ClassReport> {
 	private Set<MethodReport> methods;
-	private boolean isInterface;
+	private boolean isAbstractOrInterface;
 
 	public ClassReport() {
 		this(null);
@@ -31,23 +31,22 @@ public class ClassReport extends CodePartReport implements Comparable<ClassRepor
 		methods.add(method);
 	}
 
-	public boolean isInterface() {
-		return isInterface;
+	public boolean isAbstractOrInterface() {
+		return isAbstractOrInterface;
 	}
 
-	public void setInterface(boolean isInterface) {
-		this.isInterface = isInterface;
+	public void setIsAbstractOrInterface(boolean isAbstractOrInterface) {
+		this.isAbstractOrInterface = isAbstractOrInterface;
 	}
 
 	@Override
-	public int compareTo(ClassReport classToCompare) {
-		if (getMetrics().getMaintainabilityIndex() == classToCompare.getMetrics().getMaintainabilityIndex()) {
-			return getName().compareTo(classToCompare.getName());
+	public int compareTo(ClassReport codeToCompare) {
+		int result = getMetrics().getMaintainabilityIndex()
+				.compareTo(codeToCompare.getMetrics().getMaintainabilityIndex());
+		if (result == 0) {
+			return getName().compareTo(codeToCompare.getName());
 		}
-		if (getMetrics().getMaintainabilityIndex() > classToCompare.getMetrics().getMaintainabilityIndex()) {
-			return 1;
-		}
-		return -1;
+		return result;
 	}
 
 }

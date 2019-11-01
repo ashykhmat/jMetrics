@@ -1,0 +1,35 @@
+package com.shykhmat.test;
+
+import com.shykhmat.a.A;
+import com.shykhmat.b.B;
+import com.shykhmat.c.C;
+import com.shykhmat.generic.Generic;
+import com.shykhmat.generic.GenericType;
+import com.shykhmat.unused.Unused;
+import com.shykhmat.all.a.*;
+import com.shykhmat.all.b.*;
+import java.lang.Double;
+import static java.lang.Math.PI;
+import static java.lang.Math.sqrt;
+import static org.junit.Assert.assertEquals;
+import static java.awt.Color.testColorValueRange;
+
+@SamePackageMarkerAnnotation
+@SamePackageSingleMemberAnnotation(Constants.DEFAULT_NAME)
+@SamePackageNormalAnnotation(ref = Reference.INSTANCE, value = "value")
+public abstract class ClassWithImportAll {
+
+	private A a = new A();
+
+	public void doSmth(B input) {
+		C c = new C();
+		com.shykhmat.d.D d = new com.shykhmat.d.D();
+		com.shykhmat.hierarchy.Parent parent = new com.shykhmat.hierarchy.Child();
+		Generic<GenericType> generic = new Generic<>();
+		Undeclared undeclared = new Undeclared();
+		ImportA importA = new ImportA();
+		ImportB importB = new ImportB();
+		double r = PI;
+		assertEquals(importA, importB);
+	}
+}

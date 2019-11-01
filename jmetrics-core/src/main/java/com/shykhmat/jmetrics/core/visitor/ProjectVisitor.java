@@ -6,16 +6,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import com.shykhmat.jmetrics.core.metric.CodePartType;
 import com.shykhmat.jmetrics.core.parser.JavaParser;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
+import com.shykhmat.jmetrics.core.report.postprocessor.ProjectReportPostProcessor;
 
 /**
  * Method to visit Java Project and calculate metrics for it.
  */
 public class ProjectVisitor {
+	private ProjectReportPostProcessor projectReportPostProcessor = new ProjectReportPostProcessor();
+
 	public ProjectReport visit(String pathToProject) throws VisitorException {
 		ProjectReport project = new ProjectReport(Paths.get(pathToProject).getFileName().toString());
 		try {
@@ -31,13 +34,14 @@ public class ProjectVisitor {
 			if (childFile.isDirectory()) {
 				processJavaClasses(childFile, project);
 			} else if (childFile.getName().endsWith(".java")) {
-				ASTNode compilationUnit = JavaParser.getCodePart(
+				CompilationUnit compilationUnit = (CompilationUnit) JavaParser.getCodePart(
 						new String(Files.readAllBytes(Paths.get(childFile.getAbsolutePath()))).toCharArray(),
 						CodePartType.CLASS);
 				CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor();
-				compilationUnitVisitor.visit(compilationUnit);
+				compilationUnit.accept(compilationUnitVisitor);
 				project.getClasses().addAll(compilationUnitVisitor.getClassesReports());
 			}
 		}
+		projectReportPostProcessor.process(project);
 	}
 }
