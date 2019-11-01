@@ -1,0 +1,25 @@
+package com.shykhmat.test;
+
+import com.shykhmat.a.A;
+import com.shykhmat.b.B;
+import com.shykhmat.c.C;
+import com.shykhmat.generic.Generic;
+import com.shykhmat.generic.GenericType;
+import com.shykhmat.unused.Unused;
+
+@SamePackageMarkerAnnotation
+@SamePackageSingleMemberAnnotation(Constants.DEFAULT_NAME)
+@SamePackageNormalAnnotation(ref = Reference.INSTANCE, value = "value")
+public class ClassWithImportAll {
+
+	private A a = new A();
+
+	public void doSmth(B input) {
+		C c = new C();
+		com.shykhmat.d.D d = new com.shykhmat.d.D();
+		com.shykhmat.hierarchy.Parent parent = new com.shykhmat.hierarchy.Child();
+		Generic<GenericType> generic = new Generic<>();
+		Undeclared undeclared = new Undeclared();
+		Integer integer = 1;
+	}
+}

@@ -12,6 +12,7 @@ public class ProjectReport extends CodePartReport implements Serializable {
 	private static final long serialVersionUID = -5055487412966922425L;
 
 	private Set<ClassReport> classes;
+	private Set<PackageReport> packages;
 
 	public ProjectReport() {
 		this(null);
@@ -20,6 +21,7 @@ public class ProjectReport extends CodePartReport implements Serializable {
 	public ProjectReport(String name) {
 		super(name);
 		classes = new TreeSet<>();
+		packages = new TreeSet<>();
 	}
 
 	public Set<ClassReport> getClasses() {
@@ -33,4 +35,17 @@ public class ProjectReport extends CodePartReport implements Serializable {
 	public void addClass(ClassReport classToAdd) {
 		classes.add(classToAdd);
 	}
+
+	public Set<PackageReport> getPackages() {
+		return packages;
+	}
+
+	public void setPackages(Set<PackageReport> packages) {
+		this.packages = packages;
+	}
+
+	public void addPackage(PackageReport packageToAdd) {
+		packages.add(packageToAdd);
+	}
+
 }

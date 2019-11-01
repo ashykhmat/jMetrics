@@ -14,14 +14,12 @@ public class MethodReport extends CodePartReport implements Comparable<MethodRep
 	}
 
 	@Override
-	public int compareTo(MethodReport methodToCompare) {
-		if (getMetrics().getMaintainabilityIndex() == methodToCompare.getMetrics().getMaintainabilityIndex()) {
-			return getName().compareTo(methodToCompare.getName());
+	public int compareTo(MethodReport codeToCompare) {
+		int result = getMetrics().getMaintainabilityIndex()
+				.compareTo(codeToCompare.getMetrics().getMaintainabilityIndex());
+		if (result == 0) {
+			return getName().compareTo(codeToCompare.getName());
 		}
-		if (getMetrics().getMaintainabilityIndex() > methodToCompare.getMetrics().getMaintainabilityIndex()) {
-			return 1;
-		}
-		return -1;
+		return result;
 	}
-
 }

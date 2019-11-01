@@ -1,0 +1,13 @@
+package com.shykhmat.test;
+
+import com.shykhmat.a.A;
+import com.shykhmat.unused.Unused;
+import com.shykhmat.all.a.*;
+import com.shykhmat.all.b.*;
+
+@SamePackageMarkerAnnotation
+@SamePackageSingleMemberAnnotation(Constants.DEFAULT_NAME)
+@SamePackageNormalAnnotation(ref = Reference.INSTANCE, value = "value")
+public interface Interface {
+	void doSmth(A input, ImportA importA, ImportB importB);
+}
