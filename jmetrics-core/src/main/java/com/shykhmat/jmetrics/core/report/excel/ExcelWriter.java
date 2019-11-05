@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -69,11 +70,14 @@ public class ExcelWriter {
 	private Workbook writeToWorkbook(ProjectReport project) {
 		Workbook workbook = new SXSSFWorkbook();
 		Map<Status, CellStyle> statusCellStyles = prepareStatusCellStyles(workbook);
+		writeProjectMetrics(project, workbook, statusCellStyles);
 		writeClassesMetrics(project, workbook, statusCellStyles);
 		writeMethodsMetrics(project, workbook, statusCellStyles);
 		writeClassesCouplings(project, workbook);
 		writePackageMetrics(project, workbook);
 		writePackagesCouplings(project, workbook);
+		writeClassesCircularDependencies(project, workbook);
+		writePackagesCircularDependencies(project, workbook);
 		return workbook;
 	}
 
@@ -121,6 +125,43 @@ public class ExcelWriter {
 		}
 	}
 
+	private Sheet createSheet(Workbook workbook, String name) {
+		int sheetIndex = workbook.getSheetIndex(name);
+		if (sheetIndex >= 0) {
+			workbook.removeSheetAt(sheetIndex);
+		}
+		return workbook.createSheet(name);
+	}
+
+	private void writeProjectMetrics(ProjectReport project, Workbook workbook,
+			Map<Status, CellStyle> statusCellStyles) {
+		Sheet worksheet = createSheet(workbook, "Project");
+		createProjectHeader(worksheet);
+		Row row = worksheet.createRow(1);
+		row.createCell(0).setCellValue(project.getName());
+		row.createCell(1).setCellValue(project.getMetrics().getCyclomaticComplexity());
+		row.createCell(2).setCellValue(project.getMetrics().getLinesOfCode());
+		Cell classesCircularDependenciesSizeCell = row.createCell(3);
+		classesCircularDependenciesSizeCell.setCellValue(project.getClassesCircularDependenciesSize());
+		if (project.getClassesCircularDependenciesSize() > 0) {
+			classesCircularDependenciesSizeCell.setCellStyle(statusCellStyles.get(Status.ERROR));
+		}
+		Cell packagesCircularDependenciesSizeCell = row.createCell(4);
+		packagesCircularDependenciesSizeCell.setCellValue(project.getPackagesCircularDependenciesSize());
+		if (project.getPackagesCircularDependenciesSize() > 0) {
+			packagesCircularDependenciesSizeCell.setCellStyle(statusCellStyles.get(Status.ERROR));
+		}
+	}
+
+	private void createProjectHeader(Sheet worksheet) {
+		Row header = worksheet.createRow(0);
+		header.createCell(0).setCellValue("Project");
+		header.createCell(1).setCellValue("Cyclomatic Complexity");
+		header.createCell(2).setCellValue("Lines Of Code");
+		header.createCell(3).setCellValue("Number of classes cyclomatic dependencies");
+		header.createCell(4).setCellValue("Number of packages cyclomatic dependencies");
+	}
+
 	private void writeClassesMetrics(ProjectReport project, Workbook workbook,
 			Map<Status, CellStyle> statusCellStyles) {
 		Sheet worksheet = createSheet(workbook, "Classes");
@@ -137,14 +178,6 @@ public class ExcelWriter {
 			row.createCell(6).setCellValue(concreteClass.getAfferentCouplingUsed().size());
 			row.createCell(7).setCellValue(concreteClass.getInstability());
 		}
-	}
-
-	private Sheet createSheet(Workbook workbook, String name) {
-		int sheetIndex = workbook.getSheetIndex(name);
-		if (sheetIndex >= 0) {
-			workbook.removeSheetAt(sheetIndex);
-		}
-		return workbook.createSheet(name);
 	}
 
 	private void createMaintainabilityIndexCell(Map<Status, CellStyle> statusCellStyles, Double maintainabilityIndex,
@@ -200,13 +233,15 @@ public class ExcelWriter {
 		for (PackageReport concretePackage : project.getPackages()) {
 			Row row = worksheet.createRow(index++);
 			row.createCell(0).setCellValue(concretePackage.getName());
-			row.createCell(1).setCellValue(concretePackage.getAbstractClassesInterfacesNumber());
-			row.createCell(2).setCellValue(concretePackage.getNonAbstractClassesNumber());
-			row.createCell(3).setCellValue(concretePackage.getAbstractness());
-			row.createCell(4).setCellValue(concretePackage.getEfferentCouplingUsed().size());
-			row.createCell(5).setCellValue(concretePackage.getAfferentCouplingUsed().size());
-			row.createCell(6).setCellValue(concretePackage.getInstability());
-			row.createCell(7).setCellValue(concretePackage.getDistance());
+			row.createCell(1).setCellValue(concretePackage.getMetrics().getCyclomaticComplexity());
+			row.createCell(2).setCellValue(concretePackage.getMetrics().getLinesOfCode());
+			row.createCell(3).setCellValue(concretePackage.getAbstractClassesInterfacesNumber());
+			row.createCell(4).setCellValue(concretePackage.getNonAbstractClassesNumber());
+			row.createCell(5).setCellValue(concretePackage.getAbstractness());
+			row.createCell(6).setCellValue(concretePackage.getEfferentCouplingUsed().size());
+			row.createCell(7).setCellValue(concretePackage.getAfferentCouplingUsed().size());
+			row.createCell(8).setCellValue(concretePackage.getInstability());
+			row.createCell(9).setCellValue(concretePackage.getDistance());
 		}
 		;
 	}
@@ -214,13 +249,15 @@ public class ExcelWriter {
 	private void createPackagesHeader(Sheet worksheet) {
 		Row header = worksheet.createRow(0);
 		header.createCell(0).setCellValue("Package");
-		header.createCell(1).setCellValue("Abstract Classes and Interfaces");
-		header.createCell(2).setCellValue("Non-Abstract Classes");
-		header.createCell(3).setCellValue("Abstractness");
-		header.createCell(4).setCellValue("Efferent Coupling");
-		header.createCell(5).setCellValue("Afferent Coupling");
-		header.createCell(6).setCellValue("Instability");
-		header.createCell(7).setCellValue("Distance");
+		header.createCell(1).setCellValue("Cyclomatic Complexity");
+		header.createCell(2).setCellValue("Lines Of Code");
+		header.createCell(3).setCellValue("Abstract Classes and Interfaces");
+		header.createCell(4).setCellValue("Non-Abstract Classes");
+		header.createCell(5).setCellValue("Abstractness");
+		header.createCell(6).setCellValue("Efferent Coupling");
+		header.createCell(7).setCellValue("Afferent Coupling");
+		header.createCell(8).setCellValue("Instability");
+		header.createCell(9).setCellValue("Distance");
 	}
 
 	private void writeClassesCouplings(ProjectReport project, Workbook workbook) {
@@ -289,10 +326,29 @@ public class ExcelWriter {
 		}
 	}
 
-	private void createCouplingsHeader(Sheet worksheet, String unitType, String couplingLabel) { // uses, used by
+	private void createCouplingsHeader(Sheet worksheet, String unitType, String couplingLabel) {
 		Row header = worksheet.createRow(0);
 		header.createCell(0).setCellValue(unitType);
 		header.createCell(1).setCellValue(couplingLabel);
+	}
+
+	private void writeClassesCircularDependencies(ProjectReport project, Workbook workbook) {
+		writeCircularDependencies(project.getClassesCircularDependencies(), "Classes", workbook);
+	}
+
+	private void writePackagesCircularDependencies(ProjectReport project, Workbook workbook) {
+		writeCircularDependencies(project.getPackagesCircularDependencies(), "Packages", workbook);
+	}
+
+	private void writeCircularDependencies(Set<String> circularDependencies, String unitName, Workbook workbook) {
+		Sheet worksheet = createSheet(workbook, unitName + " Circular Dependencies");
+		Row header = worksheet.createRow(0);
+		header.createCell(0).setCellValue("Circular Dependencies");
+		int index = 1;
+		for (String circularDependency : circularDependencies) {
+			Row row = worksheet.createRow(index++);
+			row.createCell(0).setCellValue(circularDependency);
+		}
 	}
 
 }

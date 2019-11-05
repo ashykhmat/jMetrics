@@ -13,6 +13,8 @@ public class ProjectReport extends CodePartReport implements Serializable {
 
 	private Set<ClassReport> classes;
 	private Set<PackageReport> packages;
+	private Set<String> classesCircularDependencies;
+	private Set<String> packagesCircularDependencies;
 
 	public ProjectReport() {
 		this(null);
@@ -46,6 +48,30 @@ public class ProjectReport extends CodePartReport implements Serializable {
 
 	public void addPackage(PackageReport packageToAdd) {
 		packages.add(packageToAdd);
+	}
+
+	public Set<String> getClassesCircularDependencies() {
+		return classesCircularDependencies;
+	}
+
+	public void setClassesCircularDependencies(Set<String> classesCircularDependencies) {
+		this.classesCircularDependencies = classesCircularDependencies;
+	}
+
+	public Integer getClassesCircularDependenciesSize() {
+		return classesCircularDependencies.size();
+	}
+
+	public Set<String> getPackagesCircularDependencies() {
+		return packagesCircularDependencies;
+	}
+
+	public void setPackagesCircularDependencies(Set<String> packagesCircularDependencies) {
+		this.packagesCircularDependencies = packagesCircularDependencies;
+	}
+
+	public Integer getPackagesCircularDependenciesSize() {
+		return packagesCircularDependencies.size();
 	}
 
 }
