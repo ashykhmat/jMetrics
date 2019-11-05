@@ -1,8 +1,9 @@
 
-package com.shykhmat.jmetrics.core.metric;
+package com.shykhmat.jmetrics.core.metric.composite;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import com.shykhmat.jmetrics.core.metric.MetricCalculator;
 import com.shykhmat.jmetrics.core.metric.cyclomatic.CyclomaticComplexityCalculator;
 import com.shykhmat.jmetrics.core.metric.halstead.HalsteadVolumeCalculator;
 import com.shykhmat.jmetrics.core.metric.loc.LinesOfCodeCalculator;

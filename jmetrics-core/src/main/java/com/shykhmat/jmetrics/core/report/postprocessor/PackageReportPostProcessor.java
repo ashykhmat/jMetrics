@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.shykhmat.jmetrics.core.metric.coupling.CouplingMetricsCalculator;
 import com.shykhmat.jmetrics.core.report.ClassReport;
+import com.shykhmat.jmetrics.core.report.Metrics;
 import com.shykhmat.jmetrics.core.report.PackageReport;
 import com.shykhmat.jmetrics.core.report.ProjectReport;
 
@@ -22,23 +23,7 @@ public class PackageReportPostProcessor {
 		Set<ClassReport> classesReports = projectReport.getClasses();
 		Map<String, PackageReport> packageReports = new HashMap<>();
 		classesReports.forEach(classReport -> {
-			String packageName = getPackageFromClassName(classReport.getName());
-			PackageReport packageReport = packageReports.get(packageName);
-			if (packageReport == null) {
-				packageReport = new PackageReport(packageName);
-				packageReports.put(packageName, packageReport);
-			}
-			processCouplings(packageName, packageReport.getEfferentCouplingAll(), classReport.getEfferentCouplingAll());
-			processCouplings(packageName, packageReport.getEfferentCouplingUsed(),
-					classReport.getEfferentCouplingUsed());
-			processCouplings(packageName, packageReport.getAfferentCouplingAll(), classReport.getAfferentCouplingAll());
-			processCouplings(packageName, packageReport.getAfferentCouplingUsed(),
-					classReport.getAfferentCouplingUsed());
-			if (classReport.isAbstractOrInterface()) {
-				packageReport.countAbstractClasseInterface();
-			} else {
-				packageReport.countNonAbstractClass();
-			}
+			processClass(packageReports, classReport);
 		});
 		packageReports.values().forEach(packageReport -> {
 			packageReport.setInstability(couplingMetricsCalculator.calculateInstability(
@@ -49,6 +34,36 @@ public class PackageReportPostProcessor {
 					packageReport.getInstability()));
 		});
 		projectReport.setPackages(new HashSet<>(packageReports.values()));
+	}
+
+	private void processClass(Map<String, PackageReport> packageReports, ClassReport classReport) {
+		String packageName = getPackageFromClassName(classReport.getName());
+		PackageReport packageReport = packageReports.get(packageName);
+		if (packageReport == null) {
+			packageReport = new PackageReport(packageName);
+			packageReports.put(packageName, packageReport);
+		}
+		processMetrics(classReport, packageReport);
+		processCouplings(packageName, packageReport.getEfferentCouplingAll(), classReport.getEfferentCouplingAll());
+		processCouplings(packageName, packageReport.getEfferentCouplingUsed(), classReport.getEfferentCouplingUsed());
+		processCouplings(packageName, packageReport.getAfferentCouplingAll(), classReport.getAfferentCouplingAll());
+		processCouplings(packageName, packageReport.getAfferentCouplingUsed(), classReport.getAfferentCouplingUsed());
+		if (classReport.isAbstractOrInterface()) {
+			packageReport.countAbstractClasseInterface();
+		} else {
+			packageReport.countNonAbstractClass();
+		}
+	}
+
+	private void processMetrics(ClassReport classReport, PackageReport packageReport) {
+		Metrics metrics = packageReport.getMetrics();
+		if (metrics == null) {
+			metrics = new Metrics();
+			packageReport.setMetrics(metrics);
+		}
+		metrics.setCyclomaticComplexity(
+				metrics.getCyclomaticComplexity() + classReport.getMetrics().getCyclomaticComplexity());
+		metrics.setLinesOfCode(metrics.getLinesOfCode() + classReport.getMetrics().getLinesOfCode());
 	}
 
 	private String getPackageFromClassName(String className) {

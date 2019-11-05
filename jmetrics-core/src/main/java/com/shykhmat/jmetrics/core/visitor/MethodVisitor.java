@@ -14,7 +14,7 @@ import com.shykhmat.jmetrics.core.report.MethodReport;
  * Method to visit Java Method and calculate metrics for it.
  */
 public class MethodVisitor extends AbstractVisitor {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClassVisitor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MethodVisitor.class);
 	private Set<MethodReport> methodsReports = new TreeSet<>();
 
 	public Set<MethodReport> getMethodsReports() {
