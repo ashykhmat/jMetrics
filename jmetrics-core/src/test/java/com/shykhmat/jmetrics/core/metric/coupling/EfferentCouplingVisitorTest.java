@@ -43,6 +43,13 @@ public class EfferentCouplingVisitorTest {
 		expectedEfferentCouplingAll.add("ImportB");
 		expectedEfferentCouplingAll.add("org.junit.Assert");
 		expectedEfferentCouplingAll.add("java.awt.Color");
+		expectedEfferentCouplingAll.add("java.util.Base64");
+		expectedEfferentCouplingAll.add("org.slf4j.Logger");
+		expectedEfferentCouplingAll.add("org.slf4j.LoggerFactory");
+		expectedEfferentCouplingAll.add("java.util.Calendar");
+		expectedEfferentCouplingAll.add("ClassWithImportAll");
+		expectedEfferentCouplingAll.add("com.shykhmat.common.IndexedColors");
+		expectedEfferentCouplingAll.add("com.shykhmat.common.FillPatternType");
 		Set<String> expectedEfferentCouplingUsed = new HashSet<>();
 		expectedEfferentCouplingUsed.add("com.shykhmat.a.A");
 		expectedEfferentCouplingUsed.add("com.shykhmat.b.B");
@@ -61,6 +68,13 @@ public class EfferentCouplingVisitorTest {
 		expectedEfferentCouplingUsed.add("ImportA");
 		expectedEfferentCouplingUsed.add("ImportB");
 		expectedEfferentCouplingUsed.add("org.junit.Assert");
+		expectedEfferentCouplingUsed.add("java.util.Base64");
+		expectedEfferentCouplingUsed.add("org.slf4j.Logger");
+		expectedEfferentCouplingUsed.add("org.slf4j.LoggerFactory");
+		expectedEfferentCouplingUsed.add("java.util.Calendar");
+		expectedEfferentCouplingUsed.add("ClassWithImportAll");
+		expectedEfferentCouplingUsed.add("com.shykhmat.common.IndexedColors");
+		expectedEfferentCouplingUsed.add("com.shykhmat.common.FillPatternType");
 		assertCalculations("test-data/class/ClassWithImportAll.test", "com.shykhmat.test.", CodePartType.CLASS,
 				expectedEfferentCouplingAll, expectedEfferentCouplingUsed);
 	}

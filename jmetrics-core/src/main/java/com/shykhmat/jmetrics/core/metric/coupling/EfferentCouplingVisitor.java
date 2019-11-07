@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberValuePair;
@@ -15,8 +16,10 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 /**
  * Class to visit code nodes and calculate efferent coupling metric for their
@@ -60,8 +63,8 @@ public class EfferentCouplingVisitor extends ASTVisitor {
 		String importClass = node.getName().getFullyQualifiedName().replaceAll(SEMICOLON, "");
 		if (node.isStatic()) {
 			String nonStaticImport = importClass.substring(0, importClass.lastIndexOf("."));
+			staticImports.add(importClass);
 			if (!isJavaLangPackage(nonStaticImport)) {
-				staticImports.add(importClass);
 				efferentCouplingAll.add(nonStaticImport);
 			}
 		} else if (!isJavaLangPackage(importClass)) {
@@ -106,8 +109,13 @@ public class EfferentCouplingVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(MethodInvocation node) {
+		node.arguments().stream().filter(argument -> argument instanceof QualifiedName).forEach(
+				argument -> processType(((QualifiedName) argument).getQualifier().getFullyQualifiedName(), true));
+		Expression expression = node.getExpression();
+		processExpression(expression);
 		String methodName = node.getName().toString();
 		Optional<String> usedStaticImport = staticImports.stream()
 				.filter(staticImport -> staticImport.endsWith(DOT + methodName))
@@ -118,7 +126,26 @@ public class EfferentCouplingVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	@Override
+	public boolean visit(VariableDeclarationFragment node) {
+		Expression initializer = node.getInitializer();
+		processExpression(initializer);
+		return super.visit(node);
+	}
+
+	private void processExpression(Expression expression) {
+		if (expression instanceof SimpleName) {
+			processType(expression.toString(), true);
+		} else if (expression instanceof QualifiedName) {
+			processType(((QualifiedName) expression).getQualifier().getFullyQualifiedName(), true);
+		}
+	}
+
 	private void processType(String typeName) {
+		processType(typeName, false);
+	}
+
+	private void processType(String typeName, boolean skipIfNotImported) {
 		String fullyQualifiedTypeName;
 		if (typeName.contains(DOT) && !isJavaLangPackage(typeName)) {
 			fullyQualifiedTypeName = typeName;
@@ -127,11 +154,22 @@ public class EfferentCouplingVisitor extends ASTVisitor {
 			String typeNameFilter = DOT + typeName;
 			fullyQualifiedTypeName = efferentCouplingAll.stream().filter(type -> type.endsWith(typeNameFilter))
 					.findFirst().orElseGet(() -> {
-						if (!isJavaLangClass(typeName)) {
-							String nameWithPackage = containsImportAll ? typeName
-									: (packagePrefix == null ? "default." : packagePrefix) + typeName;
-							efferentCouplingAll.add(nameWithPackage);
-							return nameWithPackage;
+						String staticImport = staticImports.stream().filter(type -> type.endsWith(typeNameFilter))
+								.findFirst().orElse(null);
+						if (staticImport == null) {
+							if (!skipIfNotImported) {
+								if (!isJavaLangClass(typeName)) {
+									String nameWithPackage = containsImportAll ? typeName
+											: (packagePrefix == null ? "default." : packagePrefix) + typeName;
+									efferentCouplingAll.add(nameWithPackage);
+									return nameWithPackage;
+								}
+							}
+						} else {
+							staticImport = staticImport.substring(0, staticImport.lastIndexOf("."));
+							if (!isJavaLangPackage(staticImport)) {
+								return staticImport;
+							}
 						}
 						return null;
 					});
