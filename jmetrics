@@ -1,3 +1,0 @@
-2019-11-01 10:49:58.530 [main] INFO  com.shykhmat.jmetrics.core.api.JMetricsApi - Calculating metrics for project D:\Workspace\ashykhmat\jMetrics
-2019-11-01 10:50:01.457 [main] INFO  com.shykhmat.jmetrics.core.report.excel.ExcelWriter - Writing report file D:\jMetrics.xlsx
-2019-11-01 10:50:01.715 [main] INFO  com.shykhmat.jmetrics.core.api.JMetricsApi - Metrics were written successfully
