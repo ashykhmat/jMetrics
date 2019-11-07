@@ -13,12 +13,19 @@ import static java.lang.Math.PI;
 import static java.lang.Math.sqrt;
 import static org.junit.Assert.assertEquals;
 import static java.awt.Color.testColorValueRange;
+import java.util.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Calendar;
+import com.shykhmat.common.IndexedColors;
+import com.shykhmat.common.FillPatternType;
 
 @SamePackageMarkerAnnotation
 @SamePackageSingleMemberAnnotation(Constants.DEFAULT_NAME)
 @SamePackageNormalAnnotation(ref = Reference.INSTANCE, value = "value")
 public abstract class ClassWithImportAll {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClassWithImportAll.class);
+	
 	private A a = new A();
 
 	public void doSmth(B input) {
@@ -30,6 +37,11 @@ public abstract class ClassWithImportAll {
 		ImportA importA = new ImportA();
 		ImportB importB = new ImportB();
 		double r = PI;
+		double d = r;
 		assertEquals(importA, importB);
+		Base64.getEncoder();
+		int i = Calendar.ALL_STYLES;
+		importA.setColor(IndexedColors.GREEN.getIndex());
+		importA.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 	}
 }
