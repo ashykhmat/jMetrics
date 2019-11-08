@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.shykhmat.jmetrics.core.metric.coupling.CouplingMetricsCalculator;
+import com.shykhmat.jmetrics.core.metric.maintainability.MaintainabilityIndexCalculator;
 import com.shykhmat.jmetrics.core.report.ClassReport;
 import com.shykhmat.jmetrics.core.report.Metrics;
 import com.shykhmat.jmetrics.core.report.PackageReport;
@@ -18,6 +19,7 @@ import com.shykhmat.jmetrics.core.report.ProjectReport;
  */
 public class PackageReportPostProcessor {
 	private CouplingMetricsCalculator couplingMetricsCalculator = new CouplingMetricsCalculator();
+	private MaintainabilityIndexCalculator maintainabilityIndexCalculator = new MaintainabilityIndexCalculator();
 
 	public void process(ProjectReport projectReport) {
 		Set<ClassReport> classesReports = projectReport.getClasses();
@@ -32,6 +34,15 @@ public class PackageReportPostProcessor {
 					packageReport.getNonAbstractClassesNumber(), packageReport.getAbstractClassesInterfacesNumber()));
 			packageReport.setDistance(couplingMetricsCalculator.calculateDistance(packageReport.getAbstractness(),
 					packageReport.getInstability()));
+			Metrics metrics = packageReport.getMetrics();
+			int numberOfClasses = packageReport.getNonAbstractClassesNumber()
+					+ packageReport.getAbstractClassesInterfacesNumber();
+			metrics.setCyclomaticComplexity(metrics.getCyclomaticComplexity() / numberOfClasses);
+			metrics.getHalsteadMetrics().setVolume(metrics.getHalsteadMetrics().getVolume() / numberOfClasses);
+			int linesOfCodeTotal = metrics.getLinesOfCode();
+			metrics.setLinesOfCode(linesOfCodeTotal / numberOfClasses);
+			metrics.setMaintainabilityIndex(maintainabilityIndexCalculator.calculateMetric(metrics));
+			metrics.setLinesOfCode(linesOfCodeTotal);
 		});
 		projectReport.setPackages(new HashSet<>(packageReports.values()));
 	}
@@ -64,6 +75,8 @@ public class PackageReportPostProcessor {
 		metrics.setCyclomaticComplexity(
 				metrics.getCyclomaticComplexity() + classReport.getMetrics().getCyclomaticComplexity());
 		metrics.setLinesOfCode(metrics.getLinesOfCode() + classReport.getMetrics().getLinesOfCode());
+		metrics.getHalsteadMetrics().setVolume(
+				metrics.getHalsteadMetrics().getVolume() + classReport.getMetrics().getHalsteadMetrics().getVolume());
 	}
 
 	private String getPackageFromClassName(String className) {

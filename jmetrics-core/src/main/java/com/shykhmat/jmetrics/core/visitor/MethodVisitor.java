@@ -30,7 +30,7 @@ public class MethodVisitor extends AbstractVisitor {
 				+ ")";
 		MethodReport methodReport = new MethodReport(methodFullyQualifiedName);
 		LOGGER.debug("Processing method {} ", methodFullyQualifiedName);
-		methodReport.setMetrics(compositeMetricCalculator.calculateMetric(methodDeclaration));
+		methodReport.setMetrics(calculateCoreMetrics(methodDeclaration));
 		methodsReports.add(methodReport);
 		return super.visit(methodDeclaration);
 	}

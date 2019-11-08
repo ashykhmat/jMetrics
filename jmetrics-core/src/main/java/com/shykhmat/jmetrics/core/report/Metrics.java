@@ -5,17 +5,17 @@ package com.shykhmat.jmetrics.core.report;
  * Class that contains all metrics calculated for java class/method.
  */
 public class Metrics {
-	private Double halsteadVolume = 0.;
+	private HalsteadComplexityMetrics halsteadMetrics = new HalsteadComplexityMetrics();
 	private Integer cyclomaticComplexity = 0;
 	private Integer linesOfCode = 0;
 	private Double maintainabilityIndex = 0.;
 
-	public Double getHalsteadVolume() {
-		return halsteadVolume;
+	public HalsteadComplexityMetrics getHalsteadMetrics() {
+		return halsteadMetrics;
 	}
 
-	public void setHalsteadVolume(Double halsteadVolume) {
-		this.halsteadVolume = halsteadVolume;
+	public void setHalsteadMetrics(HalsteadComplexityMetrics halsteadMetrics) {
+		this.halsteadMetrics = halsteadMetrics;
 	}
 
 	public Integer getCyclomaticComplexity() {

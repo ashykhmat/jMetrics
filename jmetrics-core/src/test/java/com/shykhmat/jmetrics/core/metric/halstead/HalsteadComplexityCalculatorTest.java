@@ -15,6 +15,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.shykhmat.jmetrics.core.metric.CodePartType;
 import com.shykhmat.jmetrics.core.parser.JavaParser;
+import com.shykhmat.jmetrics.core.report.HalsteadComplexityMetrics;
 
 public class HalsteadComplexityCalculatorTest {
 

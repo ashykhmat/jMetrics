@@ -3,7 +3,7 @@ package com.shykhmat.jmetrics.core.report;
 /**
  * Class that contains report information for java package.
  */
-public class PackageReport extends ExtendedCodePartReport implements Comparable<PackageReport> {
+public class PackageReport extends ExtendedCodePartReport {
 
 	/**
 	 * The ratio of the number of abstract classes (and interfaces) in the analyzed
@@ -73,15 +73,6 @@ public class PackageReport extends ExtendedCodePartReport implements Comparable<
 
 	public void countAbstractClasseInterface() {
 		abstractClassesInterfacesNumber++;
-	}
-
-	@Override
-	public int compareTo(PackageReport codeToCompare) {
-		int result = distance.compareTo(codeToCompare.getDistance());
-		if (result == 0) {
-			return getName().compareTo(codeToCompare.getName());
-		}
-		return result;
 	}
 
 }

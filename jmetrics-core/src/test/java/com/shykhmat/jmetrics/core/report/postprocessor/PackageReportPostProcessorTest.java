@@ -65,7 +65,7 @@ public class PackageReportPostProcessorTest {
 		expectedShykhmatPackage.setInstability(1.);
 		expectedShykhmatPackage.setDistance(0.5);
 		Metrics expectedShykhmatPackageMetrics = new Metrics();
-		expectedShykhmatPackageMetrics.setCyclomaticComplexity(4);
+		expectedShykhmatPackageMetrics.setCyclomaticComplexity(1);
 		expectedShykhmatPackageMetrics.setLinesOfCode(40);
 		expectedShykhmatPackage.setMetrics(expectedShykhmatPackageMetrics);
 		PackageReport expectedDefaultPackage = new PackageReport("default");

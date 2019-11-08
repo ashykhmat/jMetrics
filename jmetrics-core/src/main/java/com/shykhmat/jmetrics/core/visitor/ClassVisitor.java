@@ -62,7 +62,7 @@ public class ClassVisitor extends AbstractVisitor {
 			MethodVisitor methodVisitor = new MethodVisitor();
 			node.bodyDeclarations().stream().filter(body -> body instanceof MethodDeclaration)
 					.forEach(method -> ((MethodDeclaration) method).accept(methodVisitor));
-			classReport.setMetrics(compositeMetricCalculator.calculateMetric(node));
+			classReport.setMetrics(calculateCoreMetrics(node));
 			classReport.setMethods(methodVisitor.getMethodsReports());
 			EfferentCouplingVisitor efferentCouplingVisitor = new EfferentCouplingVisitor(packageName);
 			compilationUnit.imports()

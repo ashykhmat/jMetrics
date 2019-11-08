@@ -39,11 +39,11 @@ public class ExcelWriter {
 	private final PackageCircularDependenciesExcelSheetWriter packageCircularDependenciesExcelSheetWriter;
 
 	public ExcelWriter(MetricStatusResolver<Double> maintainabilityIndexStatusResolver) {
-		projectMetricsExcelSheetWriter = new ProjectMetricsExcelSheetWriter();
+		projectMetricsExcelSheetWriter = new ProjectMetricsExcelSheetWriter(maintainabilityIndexStatusResolver);
 		classMetricsExcelSheetWriter = new ClassMetricsExcelSheetWriter(maintainabilityIndexStatusResolver);
 		methodMetricsExcelSheetWriter = new MethodMetricsExcelSheetWriter(maintainabilityIndexStatusResolver);
 		classCouplingMetricsExcelSheetWriter = new ClassCouplingMetricsExcelSheetWriter();
-		packageMetricsExcelSheetWriter = new PackageMetricsExcelSheetWriter();
+		packageMetricsExcelSheetWriter = new PackageMetricsExcelSheetWriter(maintainabilityIndexStatusResolver);
 		packageCouplingMetricsExcelSheetWriter = new PackageCouplingMetricsExcelSheetWriter();
 		classCircularDependenciesExcelSheetWriter = new ClassCircularDependenciesExcelSheetWriter();
 		packageCircularDependenciesExcelSheetWriter = new PackageCircularDependenciesExcelSheetWriter();
@@ -81,7 +81,7 @@ public class ExcelWriter {
 		classMetricsExcelSheetWriter.writeClassesMetrics(project, workbook, statusCellStyles);
 		methodMetricsExcelSheetWriter.writeMethodsMetrics(project, workbook, statusCellStyles);
 		classCouplingMetricsExcelSheetWriter.writeClassesCouplings(project, workbook);
-		packageMetricsExcelSheetWriter.writePackageMetrics(project, workbook);
+		packageMetricsExcelSheetWriter.writePackageMetrics(project, workbook, statusCellStyles);
 		packageCouplingMetricsExcelSheetWriter.writePackagesCouplings(project, workbook);
 		classCircularDependenciesExcelSheetWriter.writeClassesCircularDependencies(project, workbook);
 		packageCircularDependenciesExcelSheetWriter.writePackagesCircularDependencies(project, workbook);
