@@ -3,6 +3,7 @@ package com.shykhmat.jmetrics.sonar.plugin.ws;
 import java.io.IOException;
 
 import org.codehaus.jackson.Version;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
@@ -19,6 +20,10 @@ public final class JsonConverter {
 
 	private static ObjectMapper initObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setVisibilityChecker(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
+				.withFieldVisibility(JsonAutoDetect.Visibility.ANY).withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+				.withIsGetterVisibility(JsonAutoDetect.Visibility.NONE)
+				.withSetterVisibility(JsonAutoDetect.Visibility.NONE));
 		SimpleModule module = new SimpleModule("SimpleModule", new Version(1, 0, 0, null));
 		module.addDeserializer(Metrics.class, new MetricsDeserializer());
 		objectMapper.registerModule(module);

@@ -48,8 +48,8 @@ public class JMetricsComparator {
 		ComparedMetrics comparedMetrics = createdComparedMetrics(currentMetrics);
 		comparedMetrics.setCyclomaticComplexityStatus(
 				compareMetrics(currentMetrics.getCyclomaticComplexity(), previousMetrics.getCyclomaticComplexity()));
-		comparedMetrics.setHalsteadVolumeStatus(
-				compareMetrics(currentMetrics.getHalsteadVolume(), previousMetrics.getHalsteadVolume()));
+		comparedMetrics.setHalsteadVolumeStatus(compareMetrics(currentMetrics.getHalsteadMetrics().getVolume(),
+				previousMetrics.getHalsteadMetrics().getVolume()));
 		comparedMetrics.setLinesOfCodeStatus(
 				compareMetrics(currentMetrics.getLinesOfCode(), previousMetrics.getLinesOfCode()));
 		comparedMetrics.setMaintainabilityIndexStatus(
@@ -60,7 +60,7 @@ public class JMetricsComparator {
 	private ComparedMetrics createdComparedMetrics(Metrics metrics) {
 		ComparedMetrics comparedMetrics = new ComparedMetrics();
 		comparedMetrics.setCyclomaticComplexity(metrics.getCyclomaticComplexity());
-		comparedMetrics.setHalsteadVolume(metrics.getHalsteadVolume());
+		comparedMetrics.setHalsteadMetrics(metrics.getHalsteadMetrics());
 		comparedMetrics.setLinesOfCode(metrics.getLinesOfCode());
 		comparedMetrics.setMaintainabilityIndex(metrics.getMaintainabilityIndex());
 		return comparedMetrics;

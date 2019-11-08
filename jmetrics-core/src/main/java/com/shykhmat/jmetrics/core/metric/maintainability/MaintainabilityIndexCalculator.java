@@ -10,8 +10,8 @@ import com.shykhmat.jmetrics.core.report.Metrics;
 public class MaintainabilityIndexCalculator {
 
 	public Double calculateMetric(Metrics metrics) {
-		return (171. - 5.2 * Math.log(metrics.getHalsteadVolume()) - 0.23 * metrics.getCyclomaticComplexity()
-				- 16.2 * Math.log(metrics.getLinesOfCode())) * 100. / 171.;
+		return (171. - 5.2 * Math.log(metrics.getHalsteadMetrics().getVolume())
+				- 0.23 * metrics.getCyclomaticComplexity() - 16.2 * Math.log(metrics.getLinesOfCode())) * 100. / 171.;
 	}
 
 }

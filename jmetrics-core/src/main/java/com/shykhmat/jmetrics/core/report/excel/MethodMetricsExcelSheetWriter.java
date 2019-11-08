@@ -18,7 +18,7 @@ import com.shykhmat.jmetrics.core.report.ProjectReport;
  * Implementation of {@link MaintainabilityIndexExcelSheetWriter} to write
  * Method metrics.
  */
-public class MethodMetricsExcelSheetWriter extends MaintainabilityIndexExcelSheetWriter {
+public class MethodMetricsExcelSheetWriter extends CoreIndexExcelSheetWriter {
 
 	public MethodMetricsExcelSheetWriter(MetricStatusResolver<Double> maintainabilityIndexStatusResolver) {
 		super(maintainabilityIndexStatusResolver);
@@ -32,13 +32,18 @@ public class MethodMetricsExcelSheetWriter extends MaintainabilityIndexExcelShee
 			for (MethodReport method : concreteClass.getMethods()) {
 				Row row = worksheet.createRow(index++);
 				row.createCell(0).setCellValue(concreteClass.getName() + "." + method.getName());
-				createMaintainabilityIndexCell(statusCellStyles, method.getMetrics().getMaintainabilityIndex(), row);
-				row.createCell(2).setCellValue(method.getMetrics().getCyclomaticComplexity());
-				row.createCell(3).setCellValue(method.getMetrics().getLinesOfCode());
-				row.createCell(4).setCellValue(method.getMetrics().getHalsteadVolume());
+				row.createCell(1).setCellValue(method.getMetrics().getLinesOfCode());
+				createMaintainabilityIndexCell(statusCellStyles, method.getMetrics().getMaintainabilityIndex(), row, 2);
+				row.createCell(3).setCellValue(method.getMetrics().getCyclomaticComplexity());
+				writeHalsteadMetrics(row, method.getMetrics().getHalsteadMetrics(), 4);
 			}
 		}
-		formatAsATable(workbook, worksheet, "Methods", Arrays.asList(new String[] { "Method", "Maintainability Index",
-				"Cyclomatic Complexity", "Lines Of Code", "Halstead Volume" }), index - 1);
+		formatAsATable(workbook, worksheet, "Methods",
+				Arrays.asList(new String[] { "Method", "Lines Of Code", "Maintainability Index",
+						"Cyclomatic Complexity", "Distinct Operators", "Distinct Operands", "Occurences of Operators",
+						"Occurences of Operands", "Program Length", "Halstead Vocabulary", "Estimated Length",
+						"Purity Ratio", "Halstead Volume", "Program Difficulty", "Programming Effort",
+						"Programming Time" }),
+				index - 1);
 	}
 }

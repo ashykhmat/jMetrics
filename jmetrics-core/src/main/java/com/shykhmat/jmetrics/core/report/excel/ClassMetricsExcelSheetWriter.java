@@ -17,7 +17,7 @@ import com.shykhmat.jmetrics.core.report.ProjectReport;
  * Implementation of {@link MaintainabilityIndexExcelSheetWriter} to write Class
  * metrics.
  */
-public class ClassMetricsExcelSheetWriter extends MaintainabilityIndexExcelSheetWriter {
+public class ClassMetricsExcelSheetWriter extends CoreIndexExcelSheetWriter {
 
 	public ClassMetricsExcelSheetWriter(MetricStatusResolver<Double> maintainabilityIndexStatusResolver) {
 		super(maintainabilityIndexStatusResolver);
@@ -30,17 +30,22 @@ public class ClassMetricsExcelSheetWriter extends MaintainabilityIndexExcelSheet
 		for (ClassReport concreteClass : project.getClasses()) {
 			Row row = worksheet.createRow(index++);
 			row.createCell(0).setCellValue(concreteClass.getName());
-			createMaintainabilityIndexCell(statusCellStyles, concreteClass.getMetrics().getMaintainabilityIndex(), row);
-			row.createCell(2).setCellValue(concreteClass.getMetrics().getCyclomaticComplexity());
-			row.createCell(3).setCellValue(concreteClass.getMetrics().getLinesOfCode());
-			row.createCell(4).setCellValue(concreteClass.getMetrics().getHalsteadVolume());
-			row.createCell(5).setCellValue(concreteClass.getEfferentCouplingUsed().size());
-			row.createCell(6).setCellValue(concreteClass.getAfferentCouplingUsed().size());
-			row.createCell(7).setCellValue(concreteClass.getInstability());
+			row.createCell(1).setCellValue(concreteClass.getMetrics().getLinesOfCode());
+			createMaintainabilityIndexCell(statusCellStyles, concreteClass.getMetrics().getMaintainabilityIndex(), row,
+					2);
+			row.createCell(3).setCellValue(concreteClass.getMetrics().getCyclomaticComplexity());
+			row.createCell(4).setCellValue(concreteClass.getEfferentCouplingUsed().size());
+			row.createCell(5).setCellValue(concreteClass.getAfferentCouplingUsed().size());
+			row.createCell(6).setCellValue(concreteClass.getInstability());
+			writeHalsteadMetrics(row, concreteClass.getMetrics().getHalsteadMetrics(), 7);
 		}
 		formatAsATable(workbook, worksheet, "Classes",
-				Arrays.asList(new String[] { "Class", "Maintainability Index", "Cyclomatic Complexity", "Lines Of Code",
-						"Halstead Volume", "Efferent Coupling", "Afferent Coupling", "Instability" }),
+				Arrays.asList(new String[] { "Class", "Lines Of Code", "Maintainability Index", "Cyclomatic Complexity",
+						"Efferent Coupling", "Afferent Coupling", "Instability", "Distinct Operators",
+						"Distinct Operands", "Occurences of Operators", "Occurences of Operands", "Program Length",
+						"Halstead Vocabulary", "Estimated Length", "Purity Ratio", "Halstead Volume",
+						"Program Difficulty", "Programming Effort", "Programming Time" }),
 				index - 1);
 	}
+
 }
