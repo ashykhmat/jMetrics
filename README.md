@@ -5,9 +5,20 @@ Supported metrics:
 
 Metric | Description |
 ------------ | ------------- |
-Maintainability Index | Is a software metric which measures how maintainable (easy to support and change) the source code is. Microsoft formula is used for calculation. A **high value means better maintainability**. Color coded ratings can be used to quickly identify trouble spots in your code. A **green rating is between 20 and 100** and indicates that the code has good maintainability. A **yellow rating is between 10 and 19** and indicates that the code is moderately maintainable. A **red rating is a rating lower than 9** and indicates low maintainability. More details about formula can be found on [Microsoft Official Website][]|
+Maintainability Index (MI) | Is a software metric which measures how maintainable (easy to support and change) the source code is. Microsoft formula is used for calculation. A **high value means better maintainability**. Color coded ratings can be used to quickly identify trouble spots in your code. A **green rating is between 20 and 100** and indicates that the code has good maintainability. A **yellow rating is between 10 and 19** and indicates that the code is moderately maintainable. A **red rating is a rating lower than 9** and indicates low maintainability. More details about formula can be found on [Microsoft Official Website][]|
 Cyclomatic Complexity | Is a software metric (measurement), used to indicate the complexity of a program. It is a quantitative measure of the number of linearly independent paths through a program's source code. |
-Halstead Volume | Describes the size of the implementation of an algorithm. |
+Distinct Operators (n1)| Number of distinct operators. |
+Distinct Operands (n2)| Number of distinct operands. |
+Occurences of Operators (N1)| Total number of occurrences of operators. |
+Occurences of Operands (N2)| Total number of occurrences of operands.|
+Program Length (N) | The total number of operator occurrences and the total number of operand occurrences. N = N1 + N2 |
+Halstead Vocabulary (n)| The total number of unique operator and unique operand occurrences. n = n1 + n2|
+Estimated Length (N^) | Estimated program length. N^ = n1log2n1 + n2log2n2 |
+Purity Ratio (PR) | Ratio of estimated length and program length. PR = N^ / N |
+Program Difficulty (D) | This parameter shows how difficult to handle the program is. D = (n1 / 2) * (N2 / n2) |
+Programming Effort (E) | Measures the amount of mental activity needed to translate the existing algorithm into implementation in the specified program language. E = D * V |
+Programming Time (T) |  Shows time (in seconds) needed to translate the existing algorithm into implementation in the specified program language.|
+Halstead Volume (V) | Describes the size of the implementation of an algorithm. Proportional to program size, represents the size, in bits, of space necessary for storing the program. This parameter is dependent on specific algorithm implementation. The properties V, N, and the number of lines in the code are shown to be linearly connected and equally valid for measuring relative program size. V = Size * (log2 vocabulary) = N * log2(n) |
 Lines of Code | Describes total lines of code in the project. |
 Efferent Coupling (Ce) | The number of classes in other packages/classes that depend upon classes within the package/class is an indicator of the package/class's responsibility. Afferent couplings signal inward. |
 Afferent Coupling  (Ca)| The number of classes in other packages/classes that the classes in a package/class depend upon is an indicator of the package/class's dependence on externalities. Efferent couplings signal outward.|

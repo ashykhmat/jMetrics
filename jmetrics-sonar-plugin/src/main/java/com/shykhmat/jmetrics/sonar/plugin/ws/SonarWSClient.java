@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.config.Configuration;
+import org.sonarqube.ws.client.HttpException;
 import org.sonarqube.ws.Measures.ComponentWsResponse;
 import org.sonarqube.ws.Measures.Measure;
 import org.sonarqube.ws.client.HttpConnector;
@@ -45,10 +46,15 @@ public class SonarWSClient {
 	}
 
 	private ComponentWsResponse getComponentMeasures(String component, List<String> metricKeys) {
-		ComponentRequest request = new ComponentRequest();
-		request.setComponent(component);
-		request.setMetricKeys(metricKeys);
-		return wsClient.measures().component(request);
+		try {
+			ComponentRequest request = new ComponentRequest();
+			request.setComponent(component);
+			request.setMetricKeys(metricKeys);
+			return wsClient.measures().component(request);
+		} catch (HttpException e) {
+			LOGGER.warn("Cannot get component {} because of exception", e.getMessage());
+			return ComponentWsResponse.newBuilder().build();
+		}
 	}
 
 	private String getBaseUrl(Configuration configuration) {
