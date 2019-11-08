@@ -1,9 +1,9 @@
 package com.shykhmat.jmetrics.core.report.postprocessor;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.shykhmat.jmetrics.core.metric.coupling.CouplingMetricsCalculator;
@@ -44,7 +44,7 @@ public class PackageReportPostProcessor {
 			metrics.setMaintainabilityIndex(maintainabilityIndexCalculator.calculateMetric(metrics));
 			metrics.setLinesOfCode(linesOfCodeTotal);
 		});
-		projectReport.setPackages(new HashSet<>(packageReports.values()));
+		projectReport.setPackages(new TreeSet<>(packageReports.values()));
 	}
 
 	private void processClass(Map<String, PackageReport> packageReports, ClassReport classReport) {
